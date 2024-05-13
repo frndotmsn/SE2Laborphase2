@@ -143,6 +143,8 @@ public class Vormerkkarte
      * 
      * @ensure !{@link #istLeer()}
      */
+    
+    // TODO: merkeVor soll maybe boolean zurückgeben, ob das Vormerken geklappt hat
     public void merkeVor(Kunde kunde)
     {
         assert istVormerkenMoeglich() : "Vorbedingung verletzt: istVormerkenMoeglich()";
