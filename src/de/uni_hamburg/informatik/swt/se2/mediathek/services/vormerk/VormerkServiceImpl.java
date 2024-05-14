@@ -44,7 +44,8 @@ public class VormerkServiceImpl implements VormerkService
         }
         
         Vormerkkarte vormerkkarte = getVormerkkarte(medium);
-        return vormerkkarte.istVormerkenMoeglich();
+        
+        return vormerkkarte.istVormerkenMoeglich(kunde);
     }
 
     @Override
