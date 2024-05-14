@@ -110,15 +110,37 @@ public class Vormerkkarte
         _vormerkende.remove();
     }
     
+    
     /**
      * Gibt zurück, ob Vormerken möglich ist.
      * Dies trifft zu, wenn die Anzahl der Vormerkenden unter 3 ist.
-     * 
+     *  
      * @return ob Vormerken Möglich ist
+     * 
+     * @require kunde != null
+     * 
+     * @deprecated es sollte istVormerkenMoeglich(Kunde) verwendet werden
      */
     public boolean istVormerkenMoeglich()
     {
-        return _vormerkende.size() < 3;
+        return maximaleAnzahlVormerkendeErreicht();
+    }
+    
+    /**
+     * Gibt zurück, ob Vormerken durch einen bestimmten Kunden möglich ist.
+     * Dies trifft zu, wenn die Anzahl der Vormerkenden unter 3 ist.
+     * Der Kunde darf zusätzlich nicht Vormerker sein.
+     * 
+     * @param kunde Kunde
+     * 
+     * @return ob Vormerken Möglich ist
+     * 
+     * @require kunde != null
+     */
+    public boolean istVormerkenMoeglich(Kunde kunde)
+    {
+        assert kunde != null : "Vorbedingung verletzt: kunde != null";
+        return maximaleAnzahlVormerkendeErreicht() && !istVormerker(kunde);
     }
     
     /**
@@ -164,5 +186,16 @@ public class Vormerkkarte
     public boolean istVormerker(Kunde kunde)
     {
         return _vormerkende.contains(kunde);
+    }
+    
+    /**
+     * Gibt zurück, ob diese Vormerkkarte schon die maximale Anzahl der Vormerker erreicht hat.
+     * Die Maximale Anzahl der Vormerker ist 3.
+     *
+     * @return ob die Anzahl der Vormerker größer gleich der Maximalen ist.
+     */
+    private boolean maximaleAnzahlVormerkendeErreicht()
+    {
+        return _vormerkende.size() < 3;
     }
 }
