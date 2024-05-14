@@ -152,7 +152,7 @@ public class Vormerkkarte
         // Kunde darf nicht schon vorgemerkt haben
         assert !istVormerker(kunde) : "Vorbedingung verletzt: !istVormerker(kunde)";
         
-        _vormerkende.push(kunde);
+        _vormerkende.add(kunde);
     }
     
     /**
