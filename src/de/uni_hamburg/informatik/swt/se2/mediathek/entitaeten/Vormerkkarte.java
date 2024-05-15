@@ -107,7 +107,7 @@ public class Vormerkkarte
     {
         assert !istLeer() : "Vorbedingung verletzt: !istLeer()";
         
-        _vormerkende.remove();
+        _vormerkende.removeFirst();
     }
     
     
@@ -174,7 +174,7 @@ public class Vormerkkarte
         // Kunde darf nicht schon vorgemerkt haben
         assert !istVormerker(kunde) : "Vorbedingung verletzt: !istVormerker(kunde)";
         
-        _vormerkende.add(kunde);
+        _vormerkende.addLast(kunde);
     }
     
     /**
