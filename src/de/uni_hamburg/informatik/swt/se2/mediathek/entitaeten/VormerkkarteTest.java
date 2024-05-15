@@ -15,6 +15,7 @@ public class VormerkkarteTest
 	private Kunde _kunde1;
 	private Kunde _kunde2;
 	private Kunde _kunde3;
+	private Kunde _kunde4;
 	
 	public VormerkkarteTest()
 	{
@@ -24,6 +25,7 @@ public class VormerkkarteTest
 		_kunde1 = new Kunde(new Kundennummer(111111), "Max", "Mustermann");
 		_kunde2 = new Kunde(new Kundennummer(222222), "Lisa", "Mueller");
 		_kunde3 = new Kunde(new Kundennummer(333333), "Thorsten", "Schmidt");
+		_kunde4 = new Kunde(new Kundennummer(444444), "Karsten", "Koch");
 	}
 	
 	@Test
@@ -52,10 +54,7 @@ public class VormerkkarteTest
         assertEquals(_kunde1, _vormerkkarte.getErsterVormerker());
         assertEquals(_kunde2, _vormerkkarte.getZweiterVormerker());
         assertEquals(_kunde3, _vormerkkarte.getDritterVormerker());
-        
-        // da nur drei Vormerker zulässig sind, sollte ein vierter nicht mehr hinzugefügt werden können
-        assertFalse(_vormerkkarte.istVormerkenMoeglich());
-        
+ 
         _vormerkkarte.entferneErstenVormerker();
 		assertFalse(_vormerkkarte.istVormerker(_kunde1));
 		assertEquals(_kunde2, _vormerkkarte.getErsterVormerker());
@@ -81,6 +80,15 @@ public class VormerkkarteTest
 		_vormerkkarte.merkeVor(_kunde2);
 		_vormerkkarte.merkeVor(_kunde3);
 		assertFalse(_vormerkkarte.istVormerkenMoeglich());
+		
+		assertTrue(_vormerkkarte.istVormerkenMoeglich(_kunde1));
+		_vormerkkarte.merkeVor(_kunde1);
+		assertTrue(_vormerkkarte.istVormerkenMoeglich(_kunde2));
+		_vormerkkarte.merkeVor(_kunde2);
+		assertTrue(_vormerkkarte.istVormerkenMoeglich(_kunde3));
+		_vormerkkarte.merkeVor(_kunde3);
+		
+		assertFalse(_vormerkkarte.istVormerkenMoeglich(_kunde4));
 	}
 	
 	@Test
