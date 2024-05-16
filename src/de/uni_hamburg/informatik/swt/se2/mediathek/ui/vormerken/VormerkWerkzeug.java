@@ -240,9 +240,16 @@ public class VormerkWerkzeug
             .getSelectedMedien();
         Kunde selectedKunde = _kundenAuflisterWerkzeug.getSelectedKunde();
         // TODO für Aufgabenblatt 6 (nicht löschen): Vormerken einbauen
-        for (Medium selectedMedium : selectedMedien)
+        for (Medium medium : selectedMedien)
         {
-            _vormerkService.merkeVor(selectedKunde, selectedMedium);
+            if (_vormerkService.istVormerkenMoeglich(selectedKunde, medium))
+            {
+                _vormerkService.merkeVor(selectedKunde, medium);
+            }
+            else
+            {
+                System.out.println(medium + " konnte nicht vorgemerkt werden");
+            }
         }
     }
 
