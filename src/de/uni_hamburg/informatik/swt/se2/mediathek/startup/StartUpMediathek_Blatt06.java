@@ -12,6 +12,8 @@ import de.uni_hamburg.informatik.swt.se2.mediathek.services.persistenz.DateiLese
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.persistenz.DatenEinleser;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.verleih.VerleihService;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.verleih.VerleihServiceImpl;
+import de.uni_hamburg.informatik.swt.se2.mediathek.services.vormerk.VormerkService;
+import de.uni_hamburg.informatik.swt.se2.mediathek.services.vormerk.VormerkServiceImpl;
 import de.uni_hamburg.informatik.swt.se2.mediathek.ui.hauptwerkzeug.MediathekWerkzeug;
 
 /**
@@ -31,6 +33,7 @@ public class StartUpMediathek_Blatt06
     private static KundenstammService _kundenstamm;
     private static MedienbestandService _medienbestand;
     private static VerleihService _verleihService;
+    private static VormerkService _vormerkService;
 
     /**
      * Main-Methode, mit der die Anwendung gestartet wird.
@@ -40,7 +43,7 @@ public class StartUpMediathek_Blatt06
         erstelleServices();
 
         final MediathekWerkzeug mediathekWerkzeug = new MediathekWerkzeug(
-                _medienbestand, _kundenstamm, _verleihService);
+                _medienbestand, _kundenstamm, _verleihService, _vormerkService);
 
         // Dies ist die korrekte Art eine Swing-Anwendnung zu starten.
         SwingUtilities.invokeLater(new Runnable()
@@ -69,6 +72,7 @@ public class StartUpMediathek_Blatt06
                     datenEinleser.getKunden());
             _verleihService = new VerleihServiceImpl(_kundenstamm,
                     _medienbestand, datenEinleser.getVerleihkarten());
+            _vormerkService = new VormerkServiceImpl(_verleihService);
         }
         catch (DateiLeseException e)
         {
