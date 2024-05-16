@@ -97,7 +97,7 @@ public class AusleihWerkzeug
         // Subwerkzeuge erstellen
         _kundenAuflisterWerkzeug = new KundenauflisterWerkzeug(kundenstamm);
         _medienAuflisterWerkzeug = new AusleiheMedienauflisterWerkzeug(
-                medienbestand, verleihService);
+                medienbestand, verleihService, vormerkService);
         _medienDetailAnzeigerWerkzeug = new MedienDetailAnzeigerWerkzeug();
         _kundenDetailAnzeigerWerkzeug = new KundenDetailAnzeigerWerkzeug();
 
