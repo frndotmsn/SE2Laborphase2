@@ -38,7 +38,7 @@ public class VormerkWerkzeug
      * Der Service zum Ausleihen von Medien.
      */
     private final VerleihService _verleihService;
-    
+
     /**
      * Der Service zum Vormerken von Medien.
      */
@@ -80,13 +80,14 @@ public class VormerkWerkzeug
      * @require vormerkService != null
      */
     public VormerkWerkzeug(MedienbestandService medienbestand,
-            KundenstammService kundenstamm, VerleihService verleihService, VormerkService vormerkService)
+            KundenstammService kundenstamm, VerleihService verleihService,
+            VormerkService vormerkService)
     {
         assert medienbestand != null : "Vorbedingung verletzt: medienbestand != null";
         assert kundenstamm != null : "Vorbedingung verletzt: kundenstamm != null";
         assert verleihService != null : "Vorbedingung verletzt: verleihService != null";
         assert vormerkService != null : "Vorbedingung verletzt: vormerkService != null";
-        
+
         _verleihService = verleihService;
         _vormerkService = vormerkService;
 
@@ -239,7 +240,10 @@ public class VormerkWerkzeug
             .getSelectedMedien();
         Kunde selectedKunde = _kundenAuflisterWerkzeug.getSelectedKunde();
         // TODO für Aufgabenblatt 6 (nicht löschen): Vormerken einbauen
-
+        for (Medium selectedMedium : selectedMedien)
+        {
+            _vormerkService.merkeVor(selectedKunde, selectedMedium);
+        }
     }
 
     /**

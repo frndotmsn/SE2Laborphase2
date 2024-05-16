@@ -46,7 +46,7 @@ public class AusleihWerkzeug
      * Der Service zum Ausleihen von Medien.
      */
     private final VormerkService _vormerkService;
-    
+
     /**
      * Das Sub-Werkzeug zum darstellen und selektieren der Kunden.
      */
@@ -83,7 +83,8 @@ public class AusleihWerkzeug
      * @require vormerkService != null
      */
     public AusleihWerkzeug(MedienbestandService medienbestand,
-            KundenstammService kundenstamm, VerleihService verleihService, VormerkService vormerkService)
+            KundenstammService kundenstamm, VerleihService verleihService,
+            VormerkService vormerkService)
     {
         assert medienbestand != null : "Vorbedingung verletzt: medienbestand != null";
         assert kundenstamm != null : "Vorbedingung verletzt: kundenstamm != null";
@@ -226,7 +227,12 @@ public class AusleihWerkzeug
         // Medien nur vom ersten Vormerker ausgeliehen werden können, gemäß
         // Anforderung c).
         boolean ausleiheMoeglich = (kunde != null) && !medien.isEmpty()
-                && _verleihService.sindAlleNichtVerliehen(medien);
+                && _verleihService.sindAlleNichtVerliehen(medien)
+                && medien.stream()
+                    .map(_vormerkService::getVormerkkarte)
+                    .allMatch(vormerkkarte -> vormerkkarte
+                        .getErsterVormerker() == null
+                            || kunde.equals(vormerkkarte.getErsterVormerker()));
 
         return ausleiheMoeglich;
     }
