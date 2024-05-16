@@ -97,7 +97,7 @@ public class AusleihWerkzeug
         // Subwerkzeuge erstellen
         _kundenAuflisterWerkzeug = new KundenauflisterWerkzeug(kundenstamm);
         _medienAuflisterWerkzeug = new AusleiheMedienauflisterWerkzeug(
-                medienbestand, verleihService, vormerkService);
+                medienbestand, verleihService);
         _medienDetailAnzeigerWerkzeug = new MedienDetailAnzeigerWerkzeug();
         _kundenDetailAnzeigerWerkzeug = new KundenDetailAnzeigerWerkzeug();
 
@@ -228,7 +228,7 @@ public class AusleihWerkzeug
         // Anforderung c).
         boolean ausleiheMoeglich = (kunde != null) && !medien.isEmpty()
                 && _verleihService.sindAlleNichtVerliehen(medien)
-                && medien.stream()
+                && medien.stream() // Überprüfen, ob jedes Medium keinen Vormerker hat ODER der erste Vormerker der Ausleiher ist
                     .map(_vormerkService::getVormerkkarte)
                     .allMatch(vormerkkarte -> vormerkkarte
                         .getErsterVormerker() == null
