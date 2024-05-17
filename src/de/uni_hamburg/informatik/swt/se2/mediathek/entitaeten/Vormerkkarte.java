@@ -107,7 +107,7 @@ public class Vormerkkarte
     {
         assert !istLeer() : "Vorbedingung verletzt: !istLeer()";
         
-        _vormerkende.remove();
+        _vormerkende.poll();
     }
     
     
@@ -172,7 +172,7 @@ public class Vormerkkarte
         assert kunde != null : "Vorbedingung verletzt: kunde != null";
         assert istVormerkenMoeglich(kunde) : "Vorbedingung verletzt: istVormerkenMoeglich()";
         
-        _vormerkende.add(kunde);
+        _vormerkende.offer(kunde);
     }
     
     /**
