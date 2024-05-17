@@ -38,25 +38,25 @@ public class VormerkkarteTest
 	public void testgetVormerkerundEntferneVormerker()
 	{
 		_vormerkkarte.merkeVor(_kunde1);
-        assertFalse(_vormerkkarte.istLeer());
-        assertTrue(_vormerkkarte.istVormerker(_kunde1));
-        assertEquals(_kunde1, _vormerkkarte.getErsterVormerker());
-
-        _vormerkkarte.merkeVor(_kunde2);
-        assertTrue(_vormerkkarte.istVormerker(_kunde2));
-        assertEquals(_kunde1, _vormerkkarte.getErsterVormerker());
-        assertEquals(_kunde2, _vormerkkarte.getZweiterVormerker());
-
-        _vormerkkarte.merkeVor(_kunde3);
-        assertTrue(_vormerkkarte.istVormerker(_kunde3));
-        assertEquals(_kunde1, _vormerkkarte.getErsterVormerker());
-        assertEquals(_kunde2, _vormerkkarte.getZweiterVormerker());
-        assertEquals(_kunde3, _vormerkkarte.getDritterVormerker());
-        
-        // da nur drei Vormerker zulässig sind, sollte ein vierter nicht mehr hinzugefügt werden können
-        assertFalse(_vormerkkarte.istVormerkenMoeglich());
-        
-        _vormerkkarte.entferneErstenVormerker();
+	        assertFalse(_vormerkkarte.istLeer());
+	        assertTrue(_vormerkkarte.istVormerker(_kunde1));
+	        assertEquals(_kunde1, _vormerkkarte.getErsterVormerker());
+	
+	        _vormerkkarte.merkeVor(_kunde2);
+	        assertTrue(_vormerkkarte.istVormerker(_kunde2));
+	        assertEquals(_kunde1, _vormerkkarte.getErsterVormerker());
+	        assertEquals(_kunde2, _vormerkkarte.getZweiterVormerker());
+	
+	        _vormerkkarte.merkeVor(_kunde3);
+	        assertTrue(_vormerkkarte.istVormerker(_kunde3));
+	        assertEquals(_kunde1, _vormerkkarte.getErsterVormerker());
+	        assertEquals(_kunde2, _vormerkkarte.getZweiterVormerker());
+	        assertEquals(_kunde3, _vormerkkarte.getDritterVormerker());
+	        
+	        // da nur drei Vormerker zulässig sind, sollte ein vierter nicht mehr hinzugefügt werden können
+	        assertFalse(_vormerkkarte.istVormerkenMoeglich());
+	        
+	        _vormerkkarte.entferneErstenVormerker();
 		assertFalse(_vormerkkarte.istVormerker(_kunde1));
 		assertEquals(_kunde2, _vormerkkarte.getErsterVormerker());
 		assertEquals(_kunde3, _vormerkkarte.getZweiterVormerker());
