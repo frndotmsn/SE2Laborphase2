@@ -3,6 +3,7 @@ package de.uni_hamburg.informatik.swt.se2.mediathek.services.vormerk;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Kunde;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Vormerkkarte;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.medien.Medium;
+import de.uni_hamburg.informatik.swt.se2.mediathek.services.ObservableService;
 
 /**
  * Der VormerkService erlaubt es, Medien vorzumerken.
@@ -10,10 +11,14 @@ import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.medien.Medium;
  * Für jedes vorgemerkte Medium wird eine neue Vormerkkarte angelegt.
  * Diese Vormerkkarten bestehen auch falls sie keine Vormerker haben
  * 
+ * VerleihService ist ein ObservableService, als solcher bietet er die
+ * Möglichkeit über Verleihvorgänge zu informieren. Beobachter müssen das
+ * Interface ServiceObserver implementieren.
+ * 
  * @author Fernando Thomsen Canales
  * @version 13-05-2024.0
  */
-public interface VormerkService
+public interface VormerkService extends ObservableService
 {
     /**
      * Fügt Kunden als Vormerker des Mediums hinzu.

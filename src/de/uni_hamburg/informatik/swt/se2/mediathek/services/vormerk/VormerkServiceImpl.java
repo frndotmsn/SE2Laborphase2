@@ -6,13 +6,14 @@ import java.util.Map;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Kunde;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Vormerkkarte;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.medien.Medium;
+import de.uni_hamburg.informatik.swt.se2.mediathek.services.AbstractObservableService;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.verleih.VerleihService;
 
 /**
  * Diese Klasse implementiert das Interface VormerkService. Siehe dortiger
  * Kommentar.
  */
-public class VormerkServiceImpl implements VormerkService
+public class VormerkServiceImpl extends AbstractObservableService implements VormerkService
 {
     private final VerleihService _verleihService;
     private final Map<Medium, Vormerkkarte> _vormerkkarten;
@@ -32,6 +33,8 @@ public class VormerkServiceImpl implements VormerkService
         
         Vormerkkarte vormerkkarte = getVormerkkarte(medium);
         vormerkkarte.merkeVor(kunde);
+        // falls vormerken erfolgreich, informieren über Änderung!
+        informiereUeberAenderung();
     }
 
     @Override
