@@ -123,7 +123,7 @@ public class Vormerkkarte
      */
     public boolean istVormerkenMoeglich()
     {
-        return maximaleAnzahlVormerkendeErreicht();
+        return !maximaleAnzahlVormerkendeErreicht();
     }
     
     /**
@@ -140,7 +140,7 @@ public class Vormerkkarte
     public boolean istVormerkenMoeglich(Kunde kunde)
     {
         assert kunde != null : "Vorbedingung verletzt: kunde != null";
-        return maximaleAnzahlVormerkendeErreicht() && !istVormerker(kunde);
+        return !maximaleAnzahlVormerkendeErreicht() && !istVormerker(kunde);
     }
     
     /**
@@ -169,10 +169,8 @@ public class Vormerkkarte
     // TODO: merkeVor soll maybe boolean zurückgeben, ob das Vormerken geklappt hat
     public void merkeVor(Kunde kunde)
     {
-        assert istVormerkenMoeglich() : "Vorbedingung verletzt: istVormerkenMoeglich()";
         assert kunde != null : "Vorbedingung verletzt: kunde != null";
-        // Kunde darf nicht schon vorgemerkt haben
-        assert !istVormerker(kunde) : "Vorbedingung verletzt: !istVormerker(kunde)";
+        assert istVormerkenMoeglich(kunde) : "Vorbedingung verletzt: istVormerkenMoeglich()";
         
         _vormerkende.add(kunde);
     }
@@ -196,6 +194,6 @@ public class Vormerkkarte
      */
     private boolean maximaleAnzahlVormerkendeErreicht()
     {
-        return _vormerkende.size() < 3;
+        return _vormerkende.size() >= 3;
     }
 }
