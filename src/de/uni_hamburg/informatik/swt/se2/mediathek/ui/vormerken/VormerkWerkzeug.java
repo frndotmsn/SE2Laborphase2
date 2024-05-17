@@ -94,7 +94,7 @@ public class VormerkWerkzeug
         // Subwerkzeuge erstellen
         _kundenAuflisterWerkzeug = new KundenauflisterWerkzeug(kundenstamm);
         _medienAuflisterWerkzeug = new VormerkMedienauflisterWerkzeug(
-                medienbestand, verleihService);
+                medienbestand, verleihService, vormerkService);
         _medienDetailAnzeigerWerkzeug = new MedienDetailAnzeigerWerkzeug();
         _kundenDetailAnzeigerWerkzeug = new KundenDetailAnzeigerWerkzeug();
 
