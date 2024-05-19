@@ -1,5 +1,7 @@
 package de.uni_hamburg.informatik.swt.se2.mediathek.services.vormerk;
 
+import java.util.List;
+
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Kunde;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Vormerkkarte;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.medien.Medium;
@@ -44,6 +46,18 @@ public interface VormerkService extends ObservableService
      * @require medium != null
      */
     public boolean istVormerkenMoeglich(Kunde kunde, Medium medium);
+    
+    /**
+     * Entfernt die ersten Vormerker der Medien falls dieser dem Kunden entspricht.
+     * Falls es keinen ersten Vormerker gibt oder der Kunde diesem nicht entspricht passiert nichts.
+     * 
+     * @param kunde der Kunde, der vorher ggf. Vormerker war
+     * @param medien die Medien
+     * 
+     * @require kunde != null
+     * @require medien != null
+     */
+    public void entferneErstenVormerker(Kunde kunde, List<Medium> medien);
     
     /**
      * Gibt die zugehörige Vormerkkarte zum Medium zurück.

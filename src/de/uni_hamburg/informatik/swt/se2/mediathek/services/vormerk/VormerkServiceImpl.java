@@ -1,6 +1,7 @@
 package de.uni_hamburg.informatik.swt.se2.mediathek.services.vormerk;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Kunde;
@@ -56,5 +57,45 @@ public class VormerkServiceImpl extends AbstractObservableService implements Vor
     {
         return _vormerkkarten.computeIfAbsent(medium, (x) -> new Vormerkkarte(x));
     }
-
+    
+    @Override
+    public void entferneErstenVormerker(Kunde kunde, List<Medium> medien)
+    {
+        assert kunde != null : "Vorbedingung verletzt: kunde != null";
+        assert medien != null : "Vorbedingung verletzt: medien != null";
+        
+        for (Medium medium : medien)
+        {
+            entferneErstenVormerker(kunde, medium);
+        }
+        informiereUeberAenderung();
+    }
+    
+    /**
+     * Entfernt den ersten Vormerker eines Mediums.
+     * 
+     * @param kunde der Kunde, der ggf. Vormerker war
+     * @param medium das Medium
+     * 
+     * @require kunde != null
+     * @require medium != null
+     * 
+     * @return ob das Entfernen des ersten Vormerkers erfolgreich war
+     */
+    private boolean entferneErstenVormerker(Kunde kunde, Medium medium)
+    {
+        assert kunde != null : "Vorbedingung verletzt: kunde != null";
+        assert medium != null : "Vorbedingung verletzt: medium != null";
+        
+        Vormerkkarte vormerkkarte = getVormerkkarte(medium);
+        if (vormerkkarte.getErsterVormerker() == kunde)
+        {
+            vormerkkarte.entferneErstenVormerker();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
