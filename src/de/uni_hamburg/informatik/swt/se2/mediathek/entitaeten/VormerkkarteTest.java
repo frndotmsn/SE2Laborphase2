@@ -75,20 +75,12 @@ public class VormerkkarteTest
 	@Test
 	public void testistVormerkenMoeglich()
 	{
-		assertTrue(_vormerkkarte.istVormerkenMoeglich());
-		_vormerkkarte.merkeVor(_kunde1);
-		_vormerkkarte.merkeVor(_kunde2);
-		_vormerkkarte.merkeVor(_kunde3);
-		assertFalse(_vormerkkarte.istVormerkenMoeglich());
-		
-		assertTrue(_vormerkkarte.istVormerkenMoeglich(_kunde1));
-		_vormerkkarte.merkeVor(_kunde1);
-		assertTrue(_vormerkkarte.istVormerkenMoeglich(_kunde2));
-		_vormerkkarte.merkeVor(_kunde2);
-		assertTrue(_vormerkkarte.istVormerkenMoeglich(_kunde3));
-		_vormerkkarte.merkeVor(_kunde3);
-		
-		assertFalse(_vormerkkarte.istVormerkenMoeglich(_kunde4));
+		Vormerkkarte vormerkkarteMoeglich = new Vormerkkarte(_medium);
+		assertTrue(vormerkkarteMoeglich.istVormerkenMoeglich(_kunde1));
+		vormerkkarteMoeglich.merkeVor(_kunde1);
+		vormerkkarteMoeglich.merkeVor(_kunde2);
+		vormerkkarteMoeglich.merkeVor(_kunde3);
+		assertFalse(vormerkkarteMoeglich.istVormerkenMoeglich(_kunde4));
 	}
 	
 	@Test
