@@ -7,10 +7,12 @@ import java.util.Map;
 
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Kunde;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Verleihkarte;
+import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Vormerkkarte;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.medien.Medium;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.AbstractObservableService;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.kundenstamm.KundenstammService;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.medienbestand.MedienbestandService;
+import de.uni_hamburg.informatik.swt.se2.mediathek.services.vormerk.VormerkService;
 import de.uni_hamburg.informatik.swt.se2.mediathek.wertobjekte.Datum;
 
 /**
@@ -39,6 +41,11 @@ public class VerleihServiceImpl extends AbstractObservableService
      * Der Kundenstamm.
      */
     private KundenstammService _kundenstamm;
+    
+    /**
+     * Der Vormerkservice.
+     */
+    private VormerkService _vormerkService;
 
     /**
      * Der Protokollierer für die Verleihvorgänge.
@@ -55,17 +62,21 @@ public class VerleihServiceImpl extends AbstractObservableService
      * @require kundenstamm != null
      * @require medienbestand != null
      * @require initialBestand != null
+     * @require _vormerkService != null
      */
     public VerleihServiceImpl(KundenstammService kundenstamm,
             MedienbestandService medienbestand,
-            List<Verleihkarte> initialBestand)
+            List<Verleihkarte> initialBestand,
+            VormerkService vormerkService)
     {
         assert kundenstamm != null : "Vorbedingung verletzt: kundenstamm  != null";
         assert medienbestand != null : "Vorbedingung verletzt: medienbestand  != null";
         assert initialBestand != null : "Vorbedingung verletzt: initialBestand  != null";
+        assert vormerkService != null : "Vorbedingung verletzt: vormerkService != null";
         _verleihkarten = erzeugeVerleihkartenBestand(initialBestand);
         _kundenstamm = kundenstamm;
         _medienbestand = medienbestand;
+        _vormerkService = vormerkService;
         _protokollierer = new VerleihProtokollierer();
     }
 
@@ -210,6 +221,12 @@ public class VerleihServiceImpl extends AbstractObservableService
             _verleihkarten.put(medium, verleihkarte);
             _protokollierer.protokolliere(
                     VerleihProtokollierer.EREIGNIS_AUSLEIHE, verleihkarte);
+            
+            Vormerkkarte vormerkkarte = _vormerkService.getVormerkkarte(medium);
+            if (vormerkkarte != null && kunde.equals(vormerkkarte.getErsterVormerker()))
+            {
+            	_vormerkService.entferneVormerker(medium, kunde);
+            }
         }
         // Was passiert wenn das Protokollieren mitten in der Schleife
         // schief geht? informiereUeberAenderung in einen finally Block?

@@ -70,4 +70,11 @@ public interface VormerkService extends ObservableService
      * @ensure result != null
      */
     public Vormerkkarte getVormerkkarte(Medium medium);
+    
+    /**
+     * 
+     * @param medium
+     * @param kunde
+     */
+    public void entferneVormerker(Medium medium, Kunde kunde);
 }

@@ -19,6 +19,8 @@ import de.uni_hamburg.informatik.swt.se2.mediathek.services.kundenstamm.Kundenst
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.kundenstamm.KundenstammServiceImpl;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.medienbestand.MedienbestandService;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.medienbestand.MedienbestandServiceImpl;
+import de.uni_hamburg.informatik.swt.se2.mediathek.services.vormerk.VormerkService;
+import de.uni_hamburg.informatik.swt.se2.mediathek.services.vormerk.VormerkServiceImpl;
 import de.uni_hamburg.informatik.swt.se2.mediathek.wertobjekte.Datum;
 import de.uni_hamburg.informatik.swt.se2.mediathek.wertobjekte.Kundennummer;
 
@@ -30,6 +32,7 @@ public class VerleihServiceImplTest
     private Datum _datum;
     private Kunde _kunde;
     private VerleihService _service;
+    private VormerkService _vormerkService;
     private List<Medium> _medienListe;
     private Kunde _vormerkkunde;
 
@@ -55,8 +58,11 @@ public class VerleihServiceImplTest
         medium = new CD("CD4", "baz", "foo", 123);
         medienbestand.fuegeMediumEin(medium);
         _medienListe = medienbestand.getMedien();
+        
+        _vormerkService = new VormerkServiceImpl();
         _service = new VerleihServiceImpl(kundenstamm, medienbestand,
-                new ArrayList<Verleihkarte>());
+                new ArrayList<Verleihkarte>(), _vormerkService);
+        ((VormerkServiceImpl)_vormerkService).setVerleihService(_service);
     }
 
     @Test

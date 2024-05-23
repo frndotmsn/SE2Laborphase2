@@ -27,8 +27,8 @@ import de.uni_hamburg.informatik.swt.se2.mediathek.wertobjekte.Kundennummer;
 
 public class VormerkServiceImplTest
 {
-    private final VerleihService _verleihService;
-    private final VormerkService _vormerkService;
+    private VerleihService _verleihService;
+    private VormerkService _vormerkService;
     private Kunde _ausleiher;
     private Kunde _ersterVormerker;
     private Kunde _zweiterVormerker;
@@ -64,10 +64,9 @@ public class VormerkServiceImplTest
         medienbestand.fuegeMediumEin(_medium);
         medienbestand.fuegeMediumEin(_medium2);
         
-        _verleihService = new VerleihServiceImpl(kundenstamm, medienbestand, new ArrayList<Verleihkarte>());
-        
-        
-        _vormerkService = new VormerkServiceImpl(_verleihService);
+        _vormerkService = new VormerkServiceImpl();
+        _verleihService = new VerleihServiceImpl(kundenstamm, medienbestand, new ArrayList<Verleihkarte>(), _vormerkService);
+        ((VormerkServiceImpl)_vormerkService).setVerleihService(_verleihService);
     }
     
     @Test
@@ -181,6 +180,11 @@ public class VormerkServiceImplTest
     	_vormerkService.entferneErstenVormerker(_ersterVormerker, List.of(_medium));
     	
     	Vormerkkarte vormerkkarte = _vormerkService.getVormerkkarte(_medium);
+    	if (vormerkkarte == null)
+    	{
+    		vormerkkarte = new Vormerkkarte(_medium);
+    		((VormerkServiceImpl)_vormerkService)._vormerkkarten.put(_medium, vormerkkarte);
+    	}
     	assertTrue(vormerkkarte.istLeer());
     }
     

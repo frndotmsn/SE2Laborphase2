@@ -16,13 +16,18 @@ import de.uni_hamburg.informatik.swt.se2.mediathek.services.verleih.VerleihServi
  */
 public class VormerkServiceImpl extends AbstractObservableService implements VormerkService
 {
-    private final VerleihService _verleihService;
-    private final Map<Medium, Vormerkkarte> _vormerkkarten;
+    private VerleihService _verleihService;
+    protected final Map<Medium, Vormerkkarte> _vormerkkarten;
     
-    public VormerkServiceImpl(VerleihService verleihService)
+    public VormerkServiceImpl()
     {
-        _verleihService = verleihService;
-        _vormerkkarten = new HashMap<Medium, Vormerkkarte>();
+        _vormerkkarten = new HashMap<>();
+    }
+    
+    public void setVerleihService(VerleihService verleihService)
+    {
+    	assert verleihService != null : "Vorbedingung verletzt: verleihService != null";
+    	_verleihService = verleihService;
     }
     
     @Override
@@ -33,6 +38,11 @@ public class VormerkServiceImpl extends AbstractObservableService implements Vor
         assert istVormerkenMoeglich(kunde, medium) : "Vorbedingung verletzt: istVormerkenMoeglich(kunde, medium)";
         
         Vormerkkarte vormerkkarte = getVormerkkarte(medium);
+        if (vormerkkarte == null)
+        {
+        	vormerkkarte = new Vormerkkarte(medium);
+        	_vormerkkarten.put(medium, vormerkkarte);
+        }
         vormerkkarte.merkeVor(kunde);
         // falls vormerken erfolgreich, informieren über Änderung!
         informiereUeberAenderung();
@@ -49,13 +59,19 @@ public class VormerkServiceImpl extends AbstractObservableService implements Vor
         
         Vormerkkarte vormerkkarte = getVormerkkarte(medium);
         
-        return vormerkkarte.istVormerkenMoeglich(kunde);
+        return vormerkkarte == null || vormerkkarte.istVormerkenMoeglich(kunde);
     }
 
     @Override
     public Vormerkkarte getVormerkkarte(Medium medium)
     {
-        return _vormerkkarten.computeIfAbsent(medium, (x) -> new Vormerkkarte(x));
+    	Vormerkkarte vormerkkarte = _vormerkkarten.get(medium);
+    	if (vormerkkarte == null)
+    	{
+    		vormerkkarte = new Vormerkkarte(medium);
+    		_vormerkkarten.put(medium, vormerkkarte);
+    	}
+        return vormerkkarte;
     }
     
     @Override
@@ -88,7 +104,7 @@ public class VormerkServiceImpl extends AbstractObservableService implements Vor
         assert medium != null : "Vorbedingung verletzt: medium != null";
         
         Vormerkkarte vormerkkarte = getVormerkkarte(medium);
-        if (vormerkkarte.getErsterVormerker() == kunde)
+        if (vormerkkarte != null && kunde.equals(vormerkkarte.getErsterVormerker()))
         {
             vormerkkarte.entferneErstenVormerker();
             return true;
@@ -97,5 +113,15 @@ public class VormerkServiceImpl extends AbstractObservableService implements Vor
         {
             return false;
         }
+    }
+    
+    public void entferneVormerker(Medium medium, Kunde kunde)
+    {
+    	Vormerkkarte vormerkkarte = getVormerkkarte(medium);
+    	if (vormerkkarte != null && kunde.equals(vormerkkarte.getErsterVormerker()))
+    	{
+    		vormerkkarte.entferneErstenVormerker();
+    		informiereUeberAenderung();
+    	}
     }
 }
