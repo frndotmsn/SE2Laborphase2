@@ -18,7 +18,7 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
 
     steps:
     - uses: actions/checkout@v4
@@ -35,6 +35,9 @@ jobs:
 
     - name: Change wrapper permissions
       run: chmod +x ./gradlew
+
+    - name: Format code
+      run: ./gradlew spotlessApply
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build
