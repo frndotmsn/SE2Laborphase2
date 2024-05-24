@@ -2,6 +2,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'eclipse'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 repositories {
@@ -32,3 +33,11 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+
+spotless {
+    java {
+        toggleOffOn()
+
+        eclipse().configFile("${project.rootDir}/tools/SE2Format.xml")
+    }
+}
