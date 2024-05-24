@@ -129,7 +129,8 @@ class MedienEinleser
         assert medienDatei != null : "Vorbedingung verletzt: medienDatei != null";
         Map<Medium, Verleihkarte> eingeleseneMedien = new HashMap<Medium, Verleihkarte>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(medienDatei)))
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(medienDatei)))
         {
             Map<Kundennummer, Kunde> kundenMap = new HashMap<Kundennummer, Kunde>();
             for (Kunde kunde : kundenstamm)

@@ -40,11 +40,6 @@ public class VerleihServiceImpl extends AbstractObservableService
      * Der Kundenstamm.
      */
     private KundenstammService _kundenstamm;
-    
-    /**
-     * Der Vormerkservice.
-     */
-    private VormerkService _vormerkService;
 
     /**
      * Der Protokollierer für die Verleihvorgänge.
@@ -61,21 +56,17 @@ public class VerleihServiceImpl extends AbstractObservableService
      * @require kundenstamm != null
      * @require medienbestand != null
      * @require initialBestand != null
-     * @require _vormerkService != null
      */
     public VerleihServiceImpl(KundenstammService kundenstamm,
             MedienbestandService medienbestand,
-            List<Verleihkarte> initialBestand,
-            VormerkService vormerkService)
+            List<Verleihkarte> initialBestand)
     {
         assert kundenstamm != null : "Vorbedingung verletzt: kundenstamm  != null";
         assert medienbestand != null : "Vorbedingung verletzt: medienbestand  != null";
         assert initialBestand != null : "Vorbedingung verletzt: initialBestand  != null";
-        assert vormerkService != null : "Vorbedingung verletzt: vormerkService != null";
         _verleihkarten = erzeugeVerleihkartenBestand(initialBestand);
         _kundenstamm = kundenstamm;
         _medienbestand = medienbestand;
-        _vormerkService = vormerkService;
         _protokollierer = new VerleihProtokollierer();
     }
 
@@ -108,14 +99,16 @@ public class VerleihServiceImpl extends AbstractObservableService
     }
 
     @Override
-    public boolean istVerleihenMoeglich(Kunde kunde, List<Medium> medien)
+    public boolean istVerleihenMoeglich(Kunde kunde, List<Medium> medien,
+            VormerkService vormerkService)
     {
         assert kundeImBestand(
                 kunde) : "Vorbedingung verletzt: kundeImBestand(kunde)";
         assert medienImBestand(
                 medien) : "Vorbedingung verletzt: medienImBestand(medien)";
 
-        return sindAlleNichtVerliehen(medien);
+        return vormerkService.istVormerkerOderLeereVormerkkarte(kunde, medien)
+                && sindAlleNichtVerliehen(medien);
     }
 
     @Override
@@ -133,7 +126,7 @@ public class VerleihServiceImpl extends AbstractObservableService
             _protokollierer.protokolliere(
                     VerleihProtokollierer.EREIGNIS_RUECKGABE, verleihkarte);
         }
-        
+
         informiereUeberAenderung();
     }
 
@@ -201,16 +194,13 @@ public class VerleihServiceImpl extends AbstractObservableService
     }
 
     @Override
-    public void verleiheAn(Kunde kunde, List<Medium> medien, Datum ausleihDatum)
-            throws ProtokollierException
+    public void verleiheAn(Kunde kunde, List<Medium> medien, Datum ausleihDatum,
+            VormerkService vormerkService) throws ProtokollierException
     {
         assert kundeImBestand(
                 kunde) : "Vorbedingung verletzt: kundeImBestand(kunde)";
-        assert sindAlleNichtVerliehen(
-                medien) : "Vorbedingung verletzt: sindAlleNichtVerliehen(medien) ";
-        assert ausleihDatum != null : "Vorbedingung verletzt: ausleihDatum != null";
-        assert istVerleihenMoeglich(kunde,
-                medien) : "Vorbedingung verletzt:  istVerleihenMoeglich(kunde, medien)";
+        assert istVerleihenMoeglich(kunde, medien,
+                vormerkService) : "Vorbedingung verletzt:  istVerleihenMoeglich(kunde, medien, vormerkService)";
 
         for (Medium medium : medien)
         {
@@ -221,9 +211,11 @@ public class VerleihServiceImpl extends AbstractObservableService
             _protokollierer.protokolliere(
                     VerleihProtokollierer.EREIGNIS_AUSLEIHE, verleihkarte);
         }
+
+        vormerkService.entferneErstenVormerker(kunde, medien);
+
         // Was passiert wenn das Protokollieren mitten in der Schleife
         // schief geht? informiereUeberAenderung in einen finally Block?
-        _vormerkService.entferneErstenVormerker(medien, kunde);
         informiereUeberAenderung();
     }
 

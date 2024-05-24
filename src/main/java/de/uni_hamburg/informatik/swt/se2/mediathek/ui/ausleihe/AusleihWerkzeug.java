@@ -249,7 +249,8 @@ public class AusleihWerkzeug
         try
         {
             Datum heute = Datum.heute();
-            _verleihService.verleiheAn(selectedKunde, selectedMedien, heute);
+            _verleihService.verleiheAn(selectedKunde, selectedMedien, heute,
+                    _vormerkService);
         }
         catch (ProtokollierException exception)
         {

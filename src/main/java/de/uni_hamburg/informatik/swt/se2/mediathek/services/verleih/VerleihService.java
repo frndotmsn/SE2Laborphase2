@@ -6,6 +6,7 @@ import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Kunde;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Verleihkarte;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.medien.Medium;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.ObservableService;
+import de.uni_hamburg.informatik.swt.se2.mediathek.services.vormerk.VormerkService;
 import de.uni_hamburg.informatik.swt.se2.mediathek.wertobjekte.Datum;
 
 /**
@@ -30,24 +31,28 @@ public interface VerleihService extends ObservableService
      * @param kunde Ein Kunde, an den ein Medium verliehen werden soll
      * @param medien Die Medien, die verliehen werden sollen
      * @param ausleihDatum Der erste Ausleihtag
+     * @param vormerkService Der VormerkService
      * 
      * @throws ProtokollierException Wenn beim Protokollieren des
      *             Verleihvorgangs ein Fehler auftritt.
      * 
      * @require kundeImBestand(kunde)
-     * @require sindAlleNichtVerliehen(medien)
+     * @require {@link #istVormerkenMoeglich(kunde, medien, vormerkService)}
+     *
      * @require ausleihDatum != null
+     * @require vormerkService != null
      * 
      * @ensure sindAlleVerliehenAn(kunde, medien)
      */
-    void verleiheAn(Kunde kunde, List<Medium> medien, Datum ausleihDatum)
-            throws ProtokollierException;
+    void verleiheAn(Kunde kunde, List<Medium> medien, Datum ausleihDatum,
+            VormerkService vormerkService) throws ProtokollierException;
 
     /**
      * Prüft ob die ausgewählten Medium für den Kunde ausleihbar sind
      * 
      * @param kunde Der Kunde für den geprüft werden soll
      * @param medien Die medien
+     * @param vormerkService Der VormerkService
      * 
      * 
      * @return true, wenn das Entleihen für diesen Kunden möglich ist, sonst
@@ -55,8 +60,10 @@ public interface VerleihService extends ObservableService
      * 
      * @require kundeImBestand(kunde)
      * @require medienImBestand(medien)
+     * @require vormerkService != null
      */
-    boolean istVerleihenMoeglich(Kunde kunde, List<Medium> medien);
+    boolean istVerleihenMoeglich(Kunde kunde, List<Medium> medien,
+            VormerkService vormerkService);
 
     /**
      * Liefert den Entleiher des angegebenen Mediums.

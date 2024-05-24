@@ -1,7 +1,12 @@
 /bin/
 *.class
-*protokoll.txt
+*Protokoll.txt
 
 # Gradle settings
 build
 .gradle
+
+.DS_Store
+
+.classpath
+.project

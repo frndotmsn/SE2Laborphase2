@@ -23,7 +23,7 @@ public class Vormerkkarte
 {
     private final Medium _medium;
     private final LinkedList<Kunde> _vormerkende;
-    
+
     /**
      * Initialisert eine neue Vormerkkarte mit den gegebenen Daten.
      * 
@@ -40,7 +40,7 @@ public class Vormerkkarte
         _medium = medium;
         _vormerkende = new LinkedList<Kunde>();
     }
-    
+
     /**
      * Gibt das Medium der Vormerkkarte zurück.
      * 
@@ -52,7 +52,7 @@ public class Vormerkkarte
     {
         return _medium;
     }
-    
+
     /**
      * Gibt den ersten Vormerker zurück.
      * 
@@ -64,10 +64,10 @@ public class Vormerkkarte
         {
             return null;
         }
-        
+
         return _vormerkende.get(0);
     }
-    
+
     /**
      * Gibt den zweiten Vormerker zurück.
      * 
@@ -79,10 +79,10 @@ public class Vormerkkarte
         {
             return null;
         }
-        
+
         return _vormerkende.get(1);
     }
-    
+
     /**
      * Gibt den dritten Vormerker zurück.
      * 
@@ -94,10 +94,10 @@ public class Vormerkkarte
         {
             return null;
         }
-        
+
         return _vormerkende.get(2);
     }
-    
+
     /**
      * Entfernt den ersten Vormerker.
      * 
@@ -106,11 +106,10 @@ public class Vormerkkarte
     public void entferneErstenVormerker()
     {
         assert !istLeer() : "Vorbedingung verletzt: !istLeer()";
-        
+
         _vormerkende.poll();
     }
-    
-    
+
     /**
      * Gibt zurück, ob Vormerken möglich ist.
      * Dies trifft zu, wenn die Anzahl der Vormerkenden unter 3 ist.
@@ -121,11 +120,12 @@ public class Vormerkkarte
      * 
      * @deprecated es sollte istVormerkenMoeglich(Kunde) verwendet werden
      */
+    @Deprecated
     public boolean istVormerkenMoeglich()
     {
         return !maximaleAnzahlVormerkendeErreicht();
     }
-    
+
     /**
      * Gibt zurück, ob Vormerken durch einen bestimmten Kunden möglich ist.
      * Dies trifft zu, wenn die Anzahl der Vormerkenden unter 3 ist.
@@ -142,7 +142,7 @@ public class Vormerkkarte
         assert kunde != null : "Vorbedingung verletzt: kunde != null";
         return !maximaleAnzahlVormerkendeErreicht() && !istVormerker(kunde);
     }
-    
+
     /**
      * Gibt zurück, ob die Vormerkkarte leer ist.
      * Dass heißt, ob sie keine Vormerker hat.
@@ -153,7 +153,7 @@ public class Vormerkkarte
     {
         return _vormerkende.size() == 0;
     }
-    
+
     /**
      * Merkt den Kunden als Vormerker vor.
      * 
@@ -165,16 +165,17 @@ public class Vormerkkarte
      * 
      * @ensure !{@link #istLeer()}
      */
-    
+
     // TODO: merkeVor soll maybe boolean zurückgeben, ob das Vormerken geklappt hat
     public void merkeVor(Kunde kunde)
     {
         assert kunde != null : "Vorbedingung verletzt: kunde != null";
-        assert istVormerkenMoeglich(kunde) : "Vorbedingung verletzt: istVormerkenMoeglich()";
-        
+        assert istVormerkenMoeglich(
+                kunde) : "Vorbedingung verletzt: istVormerkenMoeglich()";
+
         _vormerkende.offer(kunde);
     }
-    
+
     /**
      * Gibt zurück, ob der Kunde ein Vormerker ist.
      * 
@@ -185,7 +186,7 @@ public class Vormerkkarte
     {
         return _vormerkende.contains(kunde);
     }
-    
+
     /**
      * Gibt zurück, ob diese Vormerkkarte schon die maximale Anzahl der Vormerker erreicht hat.
      * Die Maximale Anzahl der Vormerker ist 3.
