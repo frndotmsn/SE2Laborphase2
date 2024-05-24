@@ -70,10 +70,12 @@ public class StartUpMediathek_Blatt06
                     datenEinleser.getMedien());
             _kundenstamm = new KundenstammServiceImpl(
                     datenEinleser.getKunden());
-            _vormerkService = new VormerkServiceImpl();
-            _verleihService = new VerleihServiceImpl(_kundenstamm,
-                    _medienbestand, datenEinleser.getVerleihkarten(), _vormerkService);
-            ((VormerkServiceImpl)_vormerkService).setVerleihService(_verleihService);;
+            VormerkServiceImpl vormerkServiceImpl = new VormerkServiceImpl(null); // temporär null
+            // verleihService initialisieren, übergibt den vormerkService
+            _verleihService = new VerleihServiceImpl(_kundenstamm, _medienbestand, datenEinleser.getVerleihkarten(), vormerkServiceImpl);
+           // Verbindung des vormerkService mit dem verleihService
+            vormerkServiceImpl = new VormerkServiceImpl(_verleihService);
+            _vormerkService = vormerkServiceImpl;
         }
         catch (DateiLeseException e)
         {

@@ -54,12 +54,11 @@ public class VerleihkartenTableModelTest
         verleihkarten.add(_karte1);
         verleihkarten.add(_karte2);
         
-        VormerkService vormerkService = new VormerkServiceImpl();
+        VormerkService vormerkService = new VormerkServiceImpl(null); //temporär null
         _verleihService = new VerleihServiceImpl(kundenstamm, medienbestand,
                 verleihkarten, vormerkService);
-        ((VormerkServiceImpl)vormerkService).setVerleihService(_verleihService);
-        _model = new VerleihkartenTableModel();
-        _model.setVerleihkarten(_verleihService.getVerleihkarten());
+        
+        _model = new VerleihkartenTableModel(_verleihService.getVerleihkarten());
     }
 
     @Test

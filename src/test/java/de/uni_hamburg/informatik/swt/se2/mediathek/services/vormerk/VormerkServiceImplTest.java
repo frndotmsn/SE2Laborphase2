@@ -64,9 +64,9 @@ public class VormerkServiceImplTest
         medienbestand.fuegeMediumEin(_medium);
         medienbestand.fuegeMediumEin(_medium2);
         
-        _vormerkService = new VormerkServiceImpl();
+        _vormerkService = new VormerkServiceImpl(null);//temporär null
         _verleihService = new VerleihServiceImpl(kundenstamm, medienbestand, new ArrayList<Verleihkarte>(), _vormerkService);
-        ((VormerkServiceImpl)_vormerkService).setVerleihService(_verleihService);
+        _vormerkService = new VormerkServiceImpl(_verleihService);
     }
     
     @Test
@@ -149,7 +149,7 @@ public class VormerkServiceImplTest
     	_vormerkService.merkeVor(_dritterVormerker, _medium);
     	
     	// entfernen des ersten Vormerkers (erfolgreich)
-    	_vormerkService.entferneErstenVormerker(_ersterVormerker, List.of(_medium));
+    	_vormerkService.entferneErstenVormerker(List.of(_medium), _ersterVormerker);
     	
     	Vormerkkarte vormerkkarte = _vormerkService.getVormerkkarte(_medium);
     	assertEquals(_zweiterVormerker, vormerkkarte.getErsterVormerker());
@@ -157,19 +157,19 @@ public class VormerkServiceImplTest
     	assertNull(vormerkkarte.getDritterVormerker());
     	
     	// ersten Vormerker erneut entfernen, (sollte nicht erfolgreich sein, da er nicht mehr erster Vormerker ist)
-    	_vormerkService.entferneErstenVormerker(_ersterVormerker, List.of(_medium));
+    	_vormerkService.entferneErstenVormerker(List.of(_medium), _ersterVormerker);
     	assertEquals(_zweiterVormerker, vormerkkarte.getErsterVormerker());
     	assertEquals(_dritterVormerker, vormerkkarte.getZweiterVormerker());
     	assertNull(vormerkkarte.getDritterVormerker());
     	
     	// entfernen des jetzigen ersten Vormerkers, also zweiterVormerker
-    	_vormerkService.entferneErstenVormerker(_zweiterVormerker, List.of(_medium));
+    	_vormerkService.entferneErstenVormerker(List.of(_medium), _zweiterVormerker);
     	assertEquals(_dritterVormerker, vormerkkarte.getErsterVormerker());
     	assertNull(vormerkkarte.getZweiterVormerker());
     	assertNull(vormerkkarte.getDritterVormerker());
     	
     	// entfernen des jetzigen ersten Vormerkers, also dritterVormerker
-    	_vormerkService.entferneErstenVormerker(_dritterVormerker, List.of(_medium));
+    	_vormerkService.entferneErstenVormerker(List.of(_medium), _dritterVormerker);
     	assertTrue(vormerkkarte.istLeer());
     }
     
@@ -177,14 +177,9 @@ public class VormerkServiceImplTest
     public void testEntferneErstenVormerkerOhneVormerker()
     {
     	// versuchen Vormerker zu entfernen, obwohl derzeit kein Vormerker vorhanden ist
-    	_vormerkService.entferneErstenVormerker(_ersterVormerker, List.of(_medium));
+    	_vormerkService.entferneErstenVormerker(List.of(_medium), _ersterVormerker);
     	
     	Vormerkkarte vormerkkarte = _vormerkService.getVormerkkarte(_medium);
-    	if (vormerkkarte == null)
-    	{
-    		vormerkkarte = new Vormerkkarte(_medium);
-    		((VormerkServiceImpl)_vormerkService)._vormerkkarten.put(_medium, vormerkkarte);
-    	}
     	assertTrue(vormerkkarte.istLeer());
     }
     
@@ -195,7 +190,7 @@ public class VormerkServiceImplTest
     	_vormerkService.merkeVor(_ersterVormerker, _medium2);
     	
     	// ersten Vormerker für mehrere Medien entfernen
-    	_vormerkService.entferneErstenVormerker(_ersterVormerker, List.of(_medium, _medium2));
+    	_vormerkService.entferneErstenVormerker(List.of(_medium, _medium2),_ersterVormerker);
     	
     	Vormerkkarte vormerkkarte1 = _vormerkService.getVormerkkarte(_medium);
     	Vormerkkarte vormerkkarte2 = _vormerkService.getVormerkkarte(_medium2);

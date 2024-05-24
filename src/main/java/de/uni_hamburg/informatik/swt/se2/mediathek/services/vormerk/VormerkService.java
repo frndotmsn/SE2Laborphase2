@@ -51,13 +51,13 @@ public interface VormerkService extends ObservableService
      * Entfernt die ersten Vormerker der Medien falls dieser dem Kunden entspricht.
      * Falls es keinen ersten Vormerker gibt oder der Kunde diesem nicht entspricht passiert nichts.
      * 
+     * @param medium die Medien
      * @param kunde der Kunde, der vorher ggf. Vormerker war
-     * @param medien die Medien
      * 
      * @require kunde != null
      * @require medien != null
      */
-    public void entferneErstenVormerker(Kunde kunde, List<Medium> medien);
+    public void entferneErstenVormerker(List<Medium> medium, Kunde kunde);
     
     /**
      * Gibt die zugehörige Vormerkkarte zum Medium zurück.
@@ -71,10 +71,4 @@ public interface VormerkService extends ObservableService
      */
     public Vormerkkarte getVormerkkarte(Medium medium);
     
-    /**
-     * 
-     * @param medium
-     * @param kunde
-     */
-    public void entferneVormerker(Medium medium, Kunde kunde);
 }

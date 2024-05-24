@@ -16,18 +16,13 @@ import de.uni_hamburg.informatik.swt.se2.mediathek.services.verleih.VerleihServi
  */
 public class VormerkServiceImpl extends AbstractObservableService implements VormerkService
 {
-    private VerleihService _verleihService;
-    protected final Map<Medium, Vormerkkarte> _vormerkkarten;
+    private final VerleihService _verleihService;
+    private final Map<Medium, Vormerkkarte> _vormerkkarten;
     
-    public VormerkServiceImpl()
+    public VormerkServiceImpl(VerleihService verleihService)
     {
-        _vormerkkarten = new HashMap<>();
-    }
-    
-    public void setVerleihService(VerleihService verleihService)
-    {
-    	assert verleihService != null : "Vorbedingung verletzt: verleihService != null";
-    	_verleihService = verleihService;
+        _verleihService = verleihService;
+		_vormerkkarten = new HashMap<>();
     }
     
     @Override
@@ -38,11 +33,6 @@ public class VormerkServiceImpl extends AbstractObservableService implements Vor
         assert istVormerkenMoeglich(kunde, medium) : "Vorbedingung verletzt: istVormerkenMoeglich(kunde, medium)";
         
         Vormerkkarte vormerkkarte = getVormerkkarte(medium);
-        if (vormerkkarte == null)
-        {
-        	vormerkkarte = new Vormerkkarte(medium);
-        	_vormerkkarten.put(medium, vormerkkarte);
-        }
         vormerkkarte.merkeVor(kunde);
         // falls vormerken erfolgreich, informieren über Änderung!
         informiereUeberAenderung();
@@ -59,7 +49,7 @@ public class VormerkServiceImpl extends AbstractObservableService implements Vor
         
         Vormerkkarte vormerkkarte = getVormerkkarte(medium);
         
-        return vormerkkarte == null || vormerkkarte.istVormerkenMoeglich(kunde);
+        return vormerkkarte.istVormerkenMoeglich(kunde);
     }
 
     @Override
@@ -75,14 +65,18 @@ public class VormerkServiceImpl extends AbstractObservableService implements Vor
     }
     
     @Override
-    public void entferneErstenVormerker(Kunde kunde, List<Medium> medien)
+    public void entferneErstenVormerker(List<Medium> medien, Kunde kunde)
     {
         assert kunde != null : "Vorbedingung verletzt: kunde != null";
         assert medien != null : "Vorbedingung verletzt: medien != null";
         
         for (Medium medium : medien)
         {
-            entferneErstenVormerker(kunde, medium);
+        	Vormerkkarte vormerkkarte = getVormerkkarte(medium);
+        	if (kunde.equals(vormerkkarte.getErsterVormerker()))
+        	{
+        		vormerkkarte.entferneErstenVormerker();
+        	}
         }
         informiereUeberAenderung();
     }
@@ -104,7 +98,7 @@ public class VormerkServiceImpl extends AbstractObservableService implements Vor
         assert medium != null : "Vorbedingung verletzt: medium != null";
         
         Vormerkkarte vormerkkarte = getVormerkkarte(medium);
-        if (vormerkkarte != null && kunde.equals(vormerkkarte.getErsterVormerker()))
+        if (kunde.equals(vormerkkarte.getErsterVormerker()))
         {
             vormerkkarte.entferneErstenVormerker();
             return true;
@@ -118,7 +112,7 @@ public class VormerkServiceImpl extends AbstractObservableService implements Vor
     public void entferneVormerker(Medium medium, Kunde kunde)
     {
     	Vormerkkarte vormerkkarte = getVormerkkarte(medium);
-    	if (vormerkkarte != null && kunde.equals(vormerkkarte.getErsterVormerker()))
+    	if (kunde.equals(vormerkkarte.getErsterVormerker()))
     	{
     		vormerkkarte.entferneErstenVormerker();
     		informiereUeberAenderung();

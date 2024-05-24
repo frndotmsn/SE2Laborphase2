@@ -59,10 +59,12 @@ public class VerleihServiceImplTest
         medienbestand.fuegeMediumEin(medium);
         _medienListe = medienbestand.getMedien();
         
-        _vormerkService = new VormerkServiceImpl();
+        // temporärer VormerkService
+        _vormerkService = new VormerkServiceImpl(null); // temporär null
         _service = new VerleihServiceImpl(kundenstamm, medienbestand,
                 new ArrayList<Verleihkarte>(), _vormerkService);
-        ((VormerkServiceImpl)_vormerkService).setVerleihService(_service);
+        // nach Initialisierung richtigen VerleihService setzen
+        _vormerkService = new VormerkServiceImpl(_service);
     }
 
     @Test

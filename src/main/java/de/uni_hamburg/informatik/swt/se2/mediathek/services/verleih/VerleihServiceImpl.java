@@ -7,7 +7,6 @@ import java.util.Map;
 
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Kunde;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Verleihkarte;
-import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.Vormerkkarte;
 import de.uni_hamburg.informatik.swt.se2.mediathek.entitaeten.medien.Medium;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.AbstractObservableService;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.kundenstamm.KundenstammService;
@@ -134,7 +133,7 @@ public class VerleihServiceImpl extends AbstractObservableService
             _protokollierer.protokolliere(
                     VerleihProtokollierer.EREIGNIS_RUECKGABE, verleihkarte);
         }
-
+        
         informiereUeberAenderung();
     }
 
@@ -221,15 +220,10 @@ public class VerleihServiceImpl extends AbstractObservableService
             _verleihkarten.put(medium, verleihkarte);
             _protokollierer.protokolliere(
                     VerleihProtokollierer.EREIGNIS_AUSLEIHE, verleihkarte);
-            
-            Vormerkkarte vormerkkarte = _vormerkService.getVormerkkarte(medium);
-            if (vormerkkarte != null && kunde.equals(vormerkkarte.getErsterVormerker()))
-            {
-            	_vormerkService.entferneVormerker(medium, kunde);
-            }
         }
         // Was passiert wenn das Protokollieren mitten in der Schleife
         // schief geht? informiereUeberAenderung in einen finally Block?
+        _vormerkService.entferneErstenVormerker(medien, kunde);
         informiereUeberAenderung();
     }
 
