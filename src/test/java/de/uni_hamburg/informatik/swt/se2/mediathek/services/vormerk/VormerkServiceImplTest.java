@@ -27,175 +27,196 @@ import de.uni_hamburg.informatik.swt.se2.mediathek.wertobjekte.Kundennummer;
 
 public class VormerkServiceImplTest
 {
-    private final VerleihService _verleihService;
-    private final VormerkService _vormerkService;
+    private VerleihService _verleihService;
+    private VormerkService _vormerkService;
     private Kunde _ausleiher;
     private Kunde _ersterVormerker;
     private Kunde _zweiterVormerker;
     private Kunde _dritterVormerker;
     private Kunde _kunde;
-    
+
     private Medium _medium;
     private Medium _medium2;
-    
+
     public VormerkServiceImplTest()
     {
         _ausleiher = new Kunde(new Kundennummer(123456), "Max", "Mustermann");
         _ersterVormerker = new Kunde(new Kundennummer(234567), "Max", "Melone");
-        _zweiterVormerker = new Kunde(new Kundennummer(345678), "Moe", "Mustermann");
-        _dritterVormerker = new Kunde(new Kundennummer(456789), "Moe", "Melone");
+        _zweiterVormerker = new Kunde(new Kundennummer(345678), "Moe",
+                "Mustermann");
+        _dritterVormerker = new Kunde(new Kundennummer(456789), "Moe",
+                "Melone");
         _kunde = new Kunde(new Kundennummer(100110), "Bob", "Binaer");
-        
-        KundenstammService kundenstamm = new KundenstammServiceImpl(new ArrayList<Kunde>());
+
+        KundenstammService kundenstamm = new KundenstammServiceImpl(
+                new ArrayList<Kunde>());
         // kundenstamm mit testkunden befüllen
         kundenstamm.fuegeKundenEin(_ausleiher);
         kundenstamm.fuegeKundenEin(_ersterVormerker);
         kundenstamm.fuegeKundenEin(_zweiterVormerker);
         kundenstamm.fuegeKundenEin(_dritterVormerker);
         kundenstamm.fuegeKundenEin(_kunde);
-        
+
         _medium = new CD("CD1", "baz", "foo", 123);
         _medium2 = new CD("CD2", "bar", "fo", 124);
-        
-        MedienbestandService medienbestand = new MedienbestandServiceImpl(new ArrayList<Medium>());
-        
+
+        MedienbestandService medienbestand = new MedienbestandServiceImpl(
+                new ArrayList<Medium>());
+
         // medienbestand mit testmedien befüllen
-        
+
         medienbestand.fuegeMediumEin(_medium);
         medienbestand.fuegeMediumEin(_medium2);
-        
-        _verleihService = new VerleihServiceImpl(kundenstamm, medienbestand, new ArrayList<Verleihkarte>());
-        
-        
-        _vormerkService = new VormerkServiceImpl(_verleihService);
+
+        _vormerkService = new VormerkServiceImpl();
+        _verleihService = new VerleihServiceImpl(kundenstamm, medienbestand,
+                new ArrayList<Verleihkarte>());
     }
-    
+
     @Test
     public void testLeereVormerkkarten()
     {
-        assertTrue(_vormerkService.getVormerkkarte(_medium).istLeer());
+        assertTrue(_vormerkService.getVormerkkarte(_medium)
+            .istLeer());
     }
-    
+
     @Test
     public void testMerkeVor()
     {
-        _vormerkService.merkeVor(_ersterVormerker, _medium);
-        _vormerkService.merkeVor(_zweiterVormerker, _medium);
-        _vormerkService.merkeVor(_dritterVormerker, _medium);
+        _vormerkService.merkeVor(_ersterVormerker, _medium, _verleihService);
+        _vormerkService.merkeVor(_zweiterVormerker, _medium, _verleihService);
+        _vormerkService.merkeVor(_dritterVormerker, _medium, _verleihService);
         Vormerkkarte vormerkkarte = _vormerkService.getVormerkkarte(_medium);
-        
+
         assertEquals(vormerkkarte.getMedium(), _medium);
         assertEquals(vormerkkarte.getErsterVormerker(), _ersterVormerker);
         assertEquals(vormerkkarte.getZweiterVormerker(), _zweiterVormerker);
         assertEquals(vormerkkarte.getDritterVormerker(), _dritterVormerker);
     }
-    
+
     @Test
     public void testAusleiherIstVormerkenMoeglich()
     {
         Datum datum = new Datum(3, 9, 2042);
         try
         {
-            _verleihService.verleiheAn(_ausleiher, List.of(_medium), datum);
+            _verleihService.verleiheAn(_ausleiher, List.of(_medium), datum,
+                    _vormerkService);
         }
         catch (ProtokollierException e)
         {
             // ignorieren, hat nix mit dem testen zu tun
         }
-        
+
         // der Ausleiher darf die DVD NICHT vormerken
-        assertFalse(_vormerkService.istVormerkenMoeglich(_ausleiher, _medium));
-        
+        assertFalse(_vormerkService.istVormerkenMoeglich(_ausleiher, _medium,
+                _verleihService));
+
         try
         {
-            _verleihService.nimmZurueck(List.of(_medium), new Datum(1, 1, 2054));            
-        } catch (ProtokollierException e) {
+            _verleihService.nimmZurueck(List.of(_medium),
+                    new Datum(1, 1, 2054));
+        }
+        catch (ProtokollierException e)
+        {
             // wir ignorieren protokollier zeugs
         }
-        
+
         // jetzt sollte der Ausleiher das Medium vormerken dürfen
-        
-        assertTrue(_vormerkService.istVormerkenMoeglich(_ausleiher, _medium));
+
+        assertTrue(_vormerkService.istVormerkenMoeglich(_ausleiher, _medium,
+                _verleihService));
     }
-    
+
     @Test
     public void testIstVormerkenUnmoeglichDarfNichtDoppelt()
     {
-        _vormerkService.merkeVor(_ersterVormerker, _medium);
-        assertFalse(_vormerkService.istVormerkenMoeglich(_ersterVormerker, _medium));
+        _vormerkService.merkeVor(_ersterVormerker, _medium, _verleihService);
+        assertFalse(_vormerkService.istVormerkenMoeglich(_ersterVormerker,
+                _medium, _verleihService));
     }
-    
+
     @Test
     public void testIstVormerkenMoeglich()
     {
         // (0 Vormerker)
-        assertTrue(_vormerkService.istVormerkenMoeglich(_kunde, _medium));
-        
-        _vormerkService.merkeVor(_ersterVormerker, _medium);
-        assertTrue(_vormerkService.istVormerkenMoeglich(_kunde, _medium));
-        
-        _vormerkService.merkeVor(_zweiterVormerker, _medium);
-        assertTrue(_vormerkService.istVormerkenMoeglich(_kunde, _medium));
+        assertTrue(_vormerkService.istVormerkenMoeglich(_kunde, _medium,
+                _verleihService));
 
-        _vormerkService.merkeVor(_dritterVormerker, _medium);
-        assertFalse(_vormerkService.istVormerkenMoeglich(_kunde, _medium));
+        _vormerkService.merkeVor(_ersterVormerker, _medium, _verleihService);
+        assertTrue(_vormerkService.istVormerkenMoeglich(_kunde, _medium,
+                _verleihService));
+
+        _vormerkService.merkeVor(_zweiterVormerker, _medium, _verleihService);
+        assertTrue(_vormerkService.istVormerkenMoeglich(_kunde, _medium,
+                _verleihService));
+
+        _vormerkService.merkeVor(_dritterVormerker, _medium, _verleihService);
+        assertFalse(_vormerkService.istVormerkenMoeglich(_kunde, _medium,
+                _verleihService));
 
     }
-    
+
     @Test
     public void testEntferneErstenVormerker()
     {
-    	_vormerkService.merkeVor(_ersterVormerker, _medium);
-    	_vormerkService.merkeVor(_zweiterVormerker, _medium);
-    	_vormerkService.merkeVor(_dritterVormerker, _medium);
-    	
-    	// entfernen des ersten Vormerkers (erfolgreich)
-    	_vormerkService.entferneErstenVormerker(_ersterVormerker, List.of(_medium));
-    	
-    	Vormerkkarte vormerkkarte = _vormerkService.getVormerkkarte(_medium);
-    	assertEquals(_zweiterVormerker, vormerkkarte.getErsterVormerker());
-    	assertEquals(_dritterVormerker, vormerkkarte.getZweiterVormerker());
-    	assertNull(vormerkkarte.getDritterVormerker());
-    	
-    	// ersten Vormerker erneut entfernen, (sollte nicht erfolgreich sein, da er nicht mehr erster Vormerker ist)
-    	_vormerkService.entferneErstenVormerker(_ersterVormerker, List.of(_medium));
-    	assertEquals(_zweiterVormerker, vormerkkarte.getErsterVormerker());
-    	assertEquals(_dritterVormerker, vormerkkarte.getZweiterVormerker());
-    	assertNull(vormerkkarte.getDritterVormerker());
-    	
-    	// entfernen des jetzigen ersten Vormerkers, also zweiterVormerker
-    	_vormerkService.entferneErstenVormerker(_zweiterVormerker, List.of(_medium));
-    	assertEquals(_dritterVormerker, vormerkkarte.getErsterVormerker());
-    	assertNull(vormerkkarte.getZweiterVormerker());
-    	assertNull(vormerkkarte.getDritterVormerker());
-    	
-    	// entfernen des jetzigen ersten Vormerkers, also dritterVormerker
-    	_vormerkService.entferneErstenVormerker(_dritterVormerker, List.of(_medium));
-    	assertTrue(vormerkkarte.istLeer());
+        _vormerkService.merkeVor(_ersterVormerker, _medium, _verleihService);
+        _vormerkService.merkeVor(_zweiterVormerker, _medium, _verleihService);
+        _vormerkService.merkeVor(_dritterVormerker, _medium, _verleihService);
+
+        // entfernen des ersten Vormerkers (erfolgreich)
+        _vormerkService.entferneErstenVormerker(_ersterVormerker,
+                List.of(_medium));
+
+        Vormerkkarte vormerkkarte = _vormerkService.getVormerkkarte(_medium);
+        assertEquals(_zweiterVormerker, vormerkkarte.getErsterVormerker());
+        assertEquals(_dritterVormerker, vormerkkarte.getZweiterVormerker());
+        assertNull(vormerkkarte.getDritterVormerker());
+
+        // ersten Vormerker erneut entfernen, (sollte nicht erfolgreich sein, da er nicht mehr erster Vormerker ist)
+        _vormerkService.entferneErstenVormerker(_ersterVormerker,
+                List.of(_medium));
+        assertEquals(_zweiterVormerker, vormerkkarte.getErsterVormerker());
+        assertEquals(_dritterVormerker, vormerkkarte.getZweiterVormerker());
+        assertNull(vormerkkarte.getDritterVormerker());
+
+        // entfernen des jetzigen ersten Vormerkers, also zweiterVormerker
+        _vormerkService.entferneErstenVormerker(_zweiterVormerker,
+                List.of(_medium));
+        assertEquals(_dritterVormerker, vormerkkarte.getErsterVormerker());
+        assertNull(vormerkkarte.getZweiterVormerker());
+        assertNull(vormerkkarte.getDritterVormerker());
+
+        // entfernen des jetzigen ersten Vormerkers, also dritterVormerker
+        _vormerkService.entferneErstenVormerker(_dritterVormerker,
+                List.of(_medium));
+        assertTrue(vormerkkarte.istLeer());
     }
-    
+
     @Test
     public void testEntferneErstenVormerkerOhneVormerker()
     {
-    	// versuchen Vormerker zu entfernen, obwohl derzeit kein Vormerker vorhanden ist
-    	_vormerkService.entferneErstenVormerker(_ersterVormerker, List.of(_medium));
-    	
-    	Vormerkkarte vormerkkarte = _vormerkService.getVormerkkarte(_medium);
-    	assertTrue(vormerkkarte.istLeer());
+        // versuchen Vormerker zu entfernen, obwohl derzeit kein Vormerker vorhanden ist
+        _vormerkService.entferneErstenVormerker(_ersterVormerker,
+                List.of(_medium));
+
+        Vormerkkarte vormerkkarte = _vormerkService.getVormerkkarte(_medium);
+        assertTrue(vormerkkarte.istLeer());
     }
-    
+
     @Test
     public void testEntferneErstenVormerkerMehrereMedien()
     {
-    	_vormerkService.merkeVor(_ersterVormerker, _medium);
-    	_vormerkService.merkeVor(_ersterVormerker, _medium2);
-    	
-    	// ersten Vormerker für mehrere Medien entfernen
-    	_vormerkService.entferneErstenVormerker(_ersterVormerker, List.of(_medium, _medium2));
-    	
-    	Vormerkkarte vormerkkarte1 = _vormerkService.getVormerkkarte(_medium);
-    	Vormerkkarte vormerkkarte2 = _vormerkService.getVormerkkarte(_medium2);
-    	assertTrue(vormerkkarte1.istLeer());
-    	assertTrue(vormerkkarte2.istLeer());
+        _vormerkService.merkeVor(_ersterVormerker, _medium, _verleihService);
+        _vormerkService.merkeVor(_ersterVormerker, _medium2, _verleihService);
+
+        // ersten Vormerker für mehrere Medien entfernen
+        _vormerkService.entferneErstenVormerker(_ersterVormerker,
+                List.of(_medium, _medium2));
+
+        Vormerkkarte vormerkkarte1 = _vormerkService.getVormerkkarte(_medium);
+        Vormerkkarte vormerkkarte2 = _vormerkService.getVormerkkarte(_medium2);
+        assertTrue(vormerkkarte1.istLeer());
+        assertTrue(vormerkkarte2.istLeer());
     }
 }

@@ -40,6 +40,18 @@ public class VerleihkartenTableModel extends AbstractTableModel
     {
         _verleihkartenListe = new ArrayList<Verleihkarte>();
     }
+    
+    /**
+     * Konstruktor. Initialisiert ein neues VerleihkartenTableModel mit den gegebenen Verleihkarten.
+     * 
+     * @param verleihkarten Die Verleihkarten, die angezeigt werden sollen.
+     */
+    public VerleihkartenTableModel(List<Verleihkarte> verleihkarten)
+    {
+        assert verleihkarten != null : "Vorbedingung verletzt: verleihkarten != null";
+        _verleihkartenListe = verleihkarten;
+        sortiereVerleihkarten();
+    }
 
     @Override
     public int getColumnCount()

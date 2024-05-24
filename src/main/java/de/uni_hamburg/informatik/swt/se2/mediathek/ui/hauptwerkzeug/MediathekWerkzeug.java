@@ -68,13 +68,14 @@ public class MediathekWerkzeug
      * @require vormerkService != null
      */
     public MediathekWerkzeug(MedienbestandService medienbestand,
-            KundenstammService kundenstamm, VerleihService verleihService, VormerkService vormerkService)
+            KundenstammService kundenstamm, VerleihService verleihService,
+            VormerkService vormerkService)
     {
         assert medienbestand != null : "Vorbedingung verletzt: medienbestand != null";
         assert kundenstamm != null : "Vorbedingung verletzt: kundenstamm != null";
         assert verleihService != null : "Vorbedingung verletzt: verleihService != null";
         assert vormerkService != null : "Vorbedingung verletzt: vormerkService != null";
-        
+
         _medienbestand = medienbestand;
         _kundenstamm = kundenstamm;
         _verleihService = verleihService;
