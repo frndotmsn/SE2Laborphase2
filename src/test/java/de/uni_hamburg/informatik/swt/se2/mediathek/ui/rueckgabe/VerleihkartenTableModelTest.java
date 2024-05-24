@@ -51,6 +51,7 @@ public class VerleihkartenTableModelTest
         List<Verleihkarte> verleihkarten = new ArrayList<Verleihkarte>();
         verleihkarten.add(_karte1);
         verleihkarten.add(_karte2);
+
         _verleihService = new VerleihServiceImpl(kundenstamm, medienbestand,
                 verleihkarten);
         _model = new VerleihkartenTableModel();

@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -19,6 +18,8 @@ import de.uni_hamburg.informatik.swt.se2.mediathek.services.kundenstamm.Kundenst
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.kundenstamm.KundenstammServiceImpl;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.medienbestand.MedienbestandService;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.medienbestand.MedienbestandServiceImpl;
+import de.uni_hamburg.informatik.swt.se2.mediathek.services.vormerk.VormerkService;
+import de.uni_hamburg.informatik.swt.se2.mediathek.services.vormerk.VormerkServiceImpl;
 import de.uni_hamburg.informatik.swt.se2.mediathek.wertobjekte.Datum;
 import de.uni_hamburg.informatik.swt.se2.mediathek.wertobjekte.Kundennummer;
 
@@ -30,6 +31,7 @@ public class VerleihServiceImplTest
     private Datum _datum;
     private Kunde _kunde;
     private VerleihService _service;
+    private VormerkService _vormerkService;
     private List<Medium> _medienListe;
     private Kunde _vormerkkunde;
 
@@ -55,6 +57,8 @@ public class VerleihServiceImplTest
         medium = new CD("CD4", "baz", "foo", 123);
         medienbestand.fuegeMediumEin(medium);
         _medienListe = medienbestand.getMedien();
+
+        _vormerkService = new VormerkServiceImpl();
         _service = new VerleihServiceImpl(kundenstamm, medienbestand,
                 new ArrayList<Verleihkarte>());
     }
@@ -76,7 +80,7 @@ public class VerleihServiceImplTest
         // nicht verliehenen Medien an
         List<Medium> verlieheneMedien = _medienListe.subList(0, 2);
         List<Medium> nichtVerlieheneMedien = _medienListe.subList(2, 4);
-        _service.verleiheAn(_kunde, verlieheneMedien, _datum);
+        _service.verleiheAn(_kunde, verlieheneMedien, _datum, _vormerkService);
 
         // Prüfe, ob alle sondierenden Operationen für das Vertragsmodell
         // funktionieren
@@ -134,19 +138,20 @@ public class VerleihServiceImplTest
                 ereignisse[0] = true;
             }
         };
-        _service.verleiheAn(_kunde,
-                Collections.singletonList(_medienListe.get(0)), _datum);
+
+        _service.verleiheAn(_kunde, List.of(_medienListe.get(0)), _datum,
+                _vormerkService);
         assertFalse(ereignisse[0]);
 
         _service.registriereBeobachter(beobachter);
-        _service.verleiheAn(_kunde,
-                Collections.singletonList(_medienListe.get(1)), _datum);
+        _service.verleiheAn(_kunde, List.of(_medienListe.get(1)), _datum,
+                _vormerkService);
         assertTrue(ereignisse[0]);
 
         _service.entferneBeobachter(beobachter);
         ereignisse[0] = false;
-        _service.verleiheAn(_kunde,
-                Collections.singletonList(_medienListe.get(2)), _datum);
+        _service.verleiheAn(_kunde, List.of(_medienListe.get(2)), _datum,
+                _vormerkService);
         assertFalse(ereignisse[0]);
     }
 

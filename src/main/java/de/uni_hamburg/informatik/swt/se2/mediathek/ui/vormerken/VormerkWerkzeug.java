@@ -242,9 +242,11 @@ public class VormerkWerkzeug
         // TODO für Aufgabenblatt 6 (nicht löschen): Vormerken einbauen
         for (Medium medium : selectedMedien)
         {
-            if (_vormerkService.istVormerkenMoeglich(selectedKunde, medium))
+            if (_vormerkService.istVormerkenMoeglich(selectedKunde, medium,
+                    _verleihService))
             {
-                _vormerkService.merkeVor(selectedKunde, medium);
+                _vormerkService.merkeVor(selectedKunde, medium,
+                        _verleihService);
             }
             else
             {

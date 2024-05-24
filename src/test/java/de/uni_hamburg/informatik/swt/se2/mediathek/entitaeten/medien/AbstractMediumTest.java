@@ -52,8 +52,11 @@ public abstract class AbstractMediumTest
     {
         Medium medium = getMedium();
         Medium medium2 = getMedium();
-        assertNotEquals("Mehrere Exemplare des gleichen Mediums sollten ungleich", medium, medium2);
-        assertEquals("Dieselben Exemplare des gleichen Mediums sollten gleich", medium, medium);
+        assertNotEquals(
+                "Mehrere Exemplare des gleichen Mediums sollten ungleich",
+                medium, medium2);
+        assertEquals("Dieselben Exemplare des gleichen Mediums sollten gleich",
+                medium, medium);
     }
 
     @Test

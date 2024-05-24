@@ -44,7 +44,8 @@ class KundenEinleser
         assert kundenDatei != null : "Vorbedingung verletzt: kundenDatei != null";
         List<Kunde> eingeleseneKunden = new ArrayList<Kunde>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(kundenDatei)))
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader(kundenDatei)))
         {
             String line = null;
             // liest Datei Zeile für Zeile
