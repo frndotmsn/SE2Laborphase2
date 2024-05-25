@@ -27,6 +27,13 @@ java {
 
 application {
     mainClass = 'de.uni_hamburg.informatik.swt.se2.mediathek.startup.StartUpMediathek_Blatt06'
+    
+    applicationDefaultJvmArgs = [
+        "-ea",
+        "-Dfile.encoding=UTF-8",
+        "-Dstdout.encoding=UTF-8",
+        "-Dstderr.encoding=UTF-8"
+    ]
 }
 
 tasks.withType(JavaCompile) {
