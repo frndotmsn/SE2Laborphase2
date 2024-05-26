@@ -111,22 +111,6 @@ public class Vormerkkarte
     }
 
     /**
-     * Gibt zurück, ob Vormerken möglich ist.
-     * Dies trifft zu, wenn die Anzahl der Vormerkenden unter 3 ist.
-     *  
-     * @return ob Vormerken Möglich ist
-     * 
-     * @require kunde != null
-     * 
-     * @deprecated es sollte istVormerkenMoeglich(Kunde) verwendet werden
-     */
-    @Deprecated
-    public boolean istVormerkenMoeglich()
-    {
-        return !maximaleAnzahlVormerkendeErreicht();
-    }
-
-    /**
      * Gibt zurück, ob Vormerken durch einen bestimmten Kunden möglich ist.
      * Dies trifft zu, wenn die Anzahl der Vormerkenden unter 3 ist.
      * Der Kunde darf zusätzlich nicht Vormerker sein.
