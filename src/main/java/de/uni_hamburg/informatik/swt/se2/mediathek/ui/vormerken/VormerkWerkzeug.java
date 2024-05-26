@@ -224,6 +224,15 @@ public class VormerkWerkzeug
         // werden. Ist dies korrekt implementiert, wird der Vormerk-Button gemäß
         // der Anforderungen a), b), c) und e) aktiviert.
         boolean vormerkenMoeglich = (kunde != null) && !medien.isEmpty();
+        for (Medium medium : medien)
+        {
+            if (!_vormerkService.istVormerkenMoeglich(kunde, medium,
+                    _verleihService))
+            {
+                vormerkenMoeglich = false;
+                break;
+            }
+        }
 
         return vormerkenMoeglich;
     }
