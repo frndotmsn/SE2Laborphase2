@@ -40,6 +40,11 @@ public class MediathekWerkzeug
     private final VerleihService _verleihService;
 
     /**
+     * Der Service zum Vormerken von Medien;
+     */
+    private final VormerkService _vormerkService;
+
+    /**
      * Das AusleihWerkzeug.
      */
     private final AusleihWerkzeug _ausleihWerkzeug;
@@ -52,7 +57,7 @@ public class MediathekWerkzeug
     /**
      * Das VormerkWerkzeug.
      */
-    private VormerkWerkzeug _vormerkWerkzeug;
+    private final VormerkWerkzeug _vormerkWerkzeug;
 
     /**
      * Initialisiert ein neues MediathekWerkzeug.
@@ -79,13 +84,14 @@ public class MediathekWerkzeug
         _medienbestand = medienbestand;
         _kundenstamm = kundenstamm;
         _verleihService = verleihService;
+        _vormerkService = vormerkService;
 
         // Erzeuge Subwerkzeuge
         _ausleihWerkzeug = new AusleihWerkzeug(_medienbestand, _kundenstamm,
-                _verleihService, vormerkService);
+                _verleihService, _vormerkService);
         _rueckgabeWerkzeug = new RueckgabeWerkzeug(_verleihService);
         _vormerkWerkzeug = new VormerkWerkzeug(_medienbestand, _kundenstamm,
-                _verleihService, vormerkService);
+                _verleihService, _vormerkService);
         // Erzeuge UI für dieses Werkzeug
         _mediathekUI = new MediathekUI(_ausleihWerkzeug.getUIPanel(),
                 _rueckgabeWerkzeug.getUIPanel(), _vormerkWerkzeug.getUIPanel());
