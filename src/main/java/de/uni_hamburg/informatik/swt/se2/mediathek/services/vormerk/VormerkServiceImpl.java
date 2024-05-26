@@ -17,7 +17,7 @@ import de.uni_hamburg.informatik.swt.se2.mediathek.services.verleih.VerleihServi
 public class VormerkServiceImpl extends AbstractObservableService
         implements VormerkService
 {
-    protected final Map<Medium, Vormerkkarte> _vormerkkarten;
+    private final Map<Medium, Vormerkkarte> _vormerkkarten;
 
     public VormerkServiceImpl()
     {
