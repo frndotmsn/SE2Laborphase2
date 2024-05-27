@@ -88,44 +88,6 @@ public class VormerkServiceImpl extends AbstractObservableService
         informiereUeberAenderung();
     }
 
-    /**
-     * Entfernt den ersten Vormerker eines Mediums.
-     * 
-     * @param kunde der Kunde, der ggf. Vormerker war
-     * @param medium das Medium
-     * 
-     * @require kunde != null
-     * @require medium != null
-     * 
-     * @return ob das Entfernen des ersten Vormerkers erfolgreich war
-     */
-    private boolean entferneErstenVormerker(Kunde kunde, Medium medium)
-    {
-        assert kunde != null : "Vorbedingung verletzt: kunde != null";
-        assert medium != null : "Vorbedingung verletzt: medium != null";
-
-        Vormerkkarte vormerkkarte = getVormerkkarte(medium);
-        if (kunde.equals(vormerkkarte.getErsterVormerker()))
-        {
-            vormerkkarte.entferneErstenVormerker();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public void entferneVormerker(Medium medium, Kunde kunde)
-    {
-        Vormerkkarte vormerkkarte = getVormerkkarte(medium);
-        if (kunde.equals(vormerkkarte.getErsterVormerker()))
-        {
-            vormerkkarte.entferneErstenVormerker();
-            informiereUeberAenderung();
-        }
-    }
-
     @Override
     public boolean istVormerkerOderLeereVormerkkarte(Kunde kunde,
             List<Medium> medien)
