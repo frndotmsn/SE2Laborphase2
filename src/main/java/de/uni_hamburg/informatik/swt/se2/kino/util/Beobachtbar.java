@@ -13,6 +13,9 @@ public abstract class Beobachtbar
 {
 	private final List<Beobachter> _beobachter;
 	
+	/**
+	 * Initialisiert Felder für implementierende Klassen.
+	 */
 	protected Beobachtbar()
 	{
 		_beobachter = new ArrayList<>();
