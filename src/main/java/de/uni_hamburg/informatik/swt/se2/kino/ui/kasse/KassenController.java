@@ -47,6 +47,9 @@ public class KassenController
         _datumAuswaehlController = new DatumAuswaehlController();
         _vorstellungAuswaehlController = new VorstellungsAuswaehlController();
 
+        _datumAuswaehlController.registriereBeobachter(this::setzeTagesplanFuerAusgewaehltesDatum);
+        _vorstellungAuswaehlController.registriereBeobachter(this::setzeAusgewaehlteVorstellung);
+        
         // View erstellen (mit eingebetteten Views der direkten Submodule)
         _view = new KassenView(_platzVerkaufsController.getUIPanel(),
                 _datumAuswaehlController.getUIPanel(),
