@@ -88,6 +88,7 @@ public class PlatzVerkaufsController
 
         if (istVerkaufenMoeglich(plaetze))
         {
+            // TODO: Auf Geldbetrag Wertobjekt ändern
             int preis = _vorstellung.getPreisFuerPlaetze(plaetze);
             _view.getPreisLabel()
                 .setText("Gesamtpreis: " + preis + " Eurocent");
@@ -165,6 +166,9 @@ public class PlatzVerkaufsController
     {
         Set<Platz> plaetze = _view.getPlatzplan()
             .getAusgewaehltePlaetze();
+        
+        // TODO: BarzahlungsDialog mithilfe des Controllers erstellen / starten
+        
         vorstellung.verkaufePlaetze(plaetze);
         aktualisierePlatzplan();
     }

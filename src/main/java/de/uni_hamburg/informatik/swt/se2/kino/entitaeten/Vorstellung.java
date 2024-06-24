@@ -22,6 +22,7 @@ public class Vorstellung
     private Uhrzeit _anfangszeit;
     private Uhrzeit _endzeit;
     private Datum _datum;
+    // TODO: Auf Geldbetrag ändern
     private int _preis;
     private boolean[][] _verkauft;
     private int _anzahlVerkauftePlaetze;
@@ -177,6 +178,7 @@ public class Vorstellung
      * @require plaetze != null
      * @require hatPlaetze(plaetze)
      */
+    // TODO: Rückgabetyp auf Geldbetrag Wertobjekt ändern
     public int getPreisFuerPlaetze(Set<Platz> plaetze)
     {
         assert plaetze != null : "Vorbedingung verletzt: plaetze != null";
