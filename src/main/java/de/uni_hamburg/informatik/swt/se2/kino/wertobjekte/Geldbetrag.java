@@ -39,7 +39,7 @@ public record Geldbetrag(int eurocent) {
             // positiv + negativ => kein arithmetischer Fehler
             // negativ + positiv => kein arithmetischer Fehler
             // negativ + negativ => negativ
-            return eurocent > 0 && summand.eurocent > 0 ? Geldbetrag.MAX_VALUE : Geldbetrag.MIN_VALUE;
+            return eurocent > 0 ? Geldbetrag.MAX_VALUE : Geldbetrag.MIN_VALUE;
         }
     }
 
