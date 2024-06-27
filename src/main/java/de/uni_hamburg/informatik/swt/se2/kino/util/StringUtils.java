@@ -35,12 +35,12 @@ public class StringUtils
         StringBuilder builder = new StringBuilder();
         
         switch (padDirection) {
-            case Left:
+            case LEFT:
                 builder
                     .append(padding)
                     .append(string);
                 break;
-            case Right:
+            case RIGHT:
                 builder
                     .append(string)
                     .append(padding);

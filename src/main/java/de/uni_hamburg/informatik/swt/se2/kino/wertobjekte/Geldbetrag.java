@@ -126,12 +126,12 @@ public record Geldbetrag(int eurocent) {
         
         int euro = eurocent / 100;
         String euroString = Integer.toString(euro);
-        String paddedEuroString = StringUtils.pad(euroString, MIN_EURO_STELLEN, '0', LeftRight.Left);
+        String paddedEuroString = StringUtils.pad(euroString, MIN_EURO_STELLEN, '0', LeftRight.LEFT);
         
         // wir wollen nicht dass hier ggf. auch noch ein - steht!
         int cent = Math.abs(eurocent % 100);
         String centString = Integer.toString(cent);
-        String paddedCentString = StringUtils.pad(centString, CENT_STELLEN, '0', LeftRight.Left);
+        String paddedCentString = StringUtils.pad(centString, CENT_STELLEN, '0', LeftRight.LEFT);
 
         return new StringBuilder()
                 .append(paddedEuroString)
@@ -198,7 +198,7 @@ public record Geldbetrag(int eurocent) {
             // Ansatz: 0 anhängen, also aus "9" wird "90"
             // Mithilfe von StringUtils.pad mit padDirection = LeftRight.Right rechts 0'en ranfügen, bis man 2 Stellen hat!
             // Dann wird auch "" zu "00" gepadded und kann als int geparsed werden!
-            String paddedSecondHalf = StringUtils.pad(secondHalf, 2, '0', LeftRight.Right);
+            String paddedSecondHalf = StringUtils.pad(secondHalf, 2, '0', LeftRight.RIGHT);
             int cent = Integer.parseInt(paddedSecondHalf);
             
             if (cent >= 100)

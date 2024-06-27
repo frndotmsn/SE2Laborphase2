@@ -15,12 +15,12 @@ public class StringUtilsTest
     @Test
     public static void testPad()
     {
-        assertEquals("", StringUtils.pad("", 0, 'd', LeftRight.Left));
-        assertEquals("", StringUtils.pad("", 0, 'd', LeftRight.Right));
+        assertEquals("", StringUtils.pad("", 0, 'd', LeftRight.LEFT));
+        assertEquals("", StringUtils.pad("", 0, 'd', LeftRight.RIGHT));
 
-        assertEquals("dw", StringUtils.pad("dw", 2, 'd', LeftRight.Left));
-        assertEquals("   dw", StringUtils.pad("dw", 5, 'd', LeftRight.Left));
+        assertEquals("dw", StringUtils.pad("dw", 2, 'd', LeftRight.LEFT));
+        assertEquals("   dw", StringUtils.pad("dw", 5, 'd', LeftRight.LEFT));
         
-        assertEquals("dw     ", StringUtils.pad("dw", 7, 'd', LeftRight.Right));
+        assertEquals("dw     ", StringUtils.pad("dw", 7, 'd', LeftRight.RIGHT));
     }
 }
