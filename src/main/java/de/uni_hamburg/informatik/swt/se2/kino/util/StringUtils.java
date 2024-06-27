@@ -14,14 +14,14 @@ public class StringUtils
      * 
      * @param string der zu paddende String, falls die Länge des Strings kleiner als die Mindestlaenge ist
      * @param minLength die Mindestlaenge des Strings der zurueckgegeben wird
-     * @param padWith das Zeichen, mit dem gepaddet werden soll
+     * @param padChar das Zeichen, mit dem gepaddet werden soll
      * @param padDirection die Richtung, in die der String gepadded werden soll
      * @return der gepaddete String
      * 
      * @ensure result.length() >= lengthToPadTo
      * @require string != null
      */
-    public static String pad(String string, int minLength, char padWith, LeftRight padDirection)
+    public static String pad(String string, int minLength, char padChar, LeftRight padDirection)
     {
         assert string != null : "Vorbedingung verletzt: string != null";
         if (string.length() >= minLength)
@@ -30,7 +30,7 @@ public class StringUtils
         }
         
         int paddingLength = minLength - string.length();
-        String padding = Character.toString(padWith).repeat(paddingLength);
+        String padding = Character.toString(padChar).repeat(paddingLength);
         
         StringBuilder builder = new StringBuilder();
         
