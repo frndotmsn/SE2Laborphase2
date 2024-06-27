@@ -169,7 +169,7 @@ public record Geldbetrag(int eurocent) {
     public static Optional<Geldbetrag> fromString(String string) {
         assert string != null : "Vorbedingung verletzt: string != null";
         
-        String[] parts = string.split(",");
+        String[] parts = string.split(",", 2);
         
         String firstHalf = parts.length > 0 ? parts[0] : "";
         if (!firstHalf.matches("-{0,1}\\d*"))
@@ -183,60 +183,73 @@ public record Geldbetrag(int eurocent) {
             return Optional.empty();
         }
         
-        try
+        // '-' am Anfang muss sowohl für Euro als auch für Cent gelten!
+        // Sonst wird -300,21 als -30000 + 21 Eurocent interpretiert!
+        // Einfach am Ende mit -1 multiplizieren, falls '-' am Anfang!
+        boolean negativ = firstHalf.startsWith("-");
+        
+        // entfernt das '-' als präfix
+        if (negativ)
         {
-            // '-' am Anfang muss sowohl für Euro als auch für Cent gelten!
-            // Sonst wird -300,21 als -30000 + 21 Eurocent interpretiert!
-            // Einfach am Ende mit -1 multiplizieren, falls '-' am Anfang!
-            boolean negativ = firstHalf.startsWith("-");
-            
-            // Und dann einfach Absolutwert der ersten Hälfte nehmen damit das '-' dann nichts da tut
-            int euro = firstHalf.isEmpty() ? 0 : Math.abs(Integer.parseInt(firstHalf));
-            
-            // eine Ziffer als Nachkommastelle
-            // z.B. .....,9 sollte als .... Euro + 90 Cent interpretiert werden!
-            // Ansatz: 0 anhängen, also aus "9" wird "90"
-            // Mithilfe von StringUtils.pad mit padDirection = LeftRight.Right rechts 0'en ranfügen, bis man 2 Stellen hat!
-            // Dann wird auch "" zu "00" gepadded und kann als int geparsed werden!
-            String paddedSecondHalf = StringUtils.pad(secondHalf, 2, '0', LeftRight.RIGHT);
-            int cent = Integer.parseInt(paddedSecondHalf);
-            
-            if (cent >= 100)
+            firstHalf = firstHalf.substring(1);
+        }
+        
+        int euro = 0;
+        if (!firstHalf.isEmpty())
+        {
+            try
+            {
+                euro = Integer.parseInt(firstHalf);
+            }
+            catch (NumberFormatException e)
             {
                 return Optional.empty();
             }
-            
-            int euroInCent;
-            try
-            {
-                euroInCent = Math.multiplyExact(euro, 100);
-            }
-            catch (ArithmeticException e)
-            {
-                euroInCent = euro > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-            }
-            
-            int summeInEurocent;
-            try
-            {
-                summeInEurocent = Math.addExact(euroInCent, cent);
-            }
-            catch (ArithmeticException e)
-            {
-                summeInEurocent = euroInCent > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
-            }
-            
-            if (negativ)
-            {
-                summeInEurocent *= -1;
-            }
-            
-            return Optional.of(new Geldbetrag(summeInEurocent));
         }
-        catch (NumberFormatException e)
+        
+        // eine Ziffer als Nachkommastelle
+        // z.B. .....,9 sollte als .... Euro + 90 Cent interpretiert werden!
+        // Ansatz: 0 anhängen, also aus "9" wird "90"
+        // Mithilfe von StringUtils.pad mit padDirection = LeftRight.Right rechts 0'en ranfügen, bis man 2 Stellen hat!
+        // Dann wird auch "" zu "00" gepadded und kann als int geparsed werden!
+        String paddedSecondHalf = StringUtils.pad(secondHalf, 2, '0', LeftRight.RIGHT);
+        
+        // hier sollte niemals eine NumberFormatException auftreten
+        // da vorher ja per regex geprüft wird, dass nur Ziffern drin sind
+        // und der String mit 0en auf 2 Stellen gefüllt wird!
+        int cent = Integer.parseInt(paddedSecondHalf);
+        
+        if (cent >= 100)
         {
             return Optional.empty();
         }
+        
+        int euroInCent;
+        try
+        {
+            euroInCent = Math.multiplyExact(euro, 100);
+        }
+        catch (ArithmeticException e)
+        {
+            euroInCent = euro > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+        }
+        
+        int summeInEurocent;
+        try
+        {
+            summeInEurocent = Math.addExact(euroInCent, cent);
+        }
+        catch (ArithmeticException e)
+        {
+            summeInEurocent = euroInCent > 0 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+        }
+        
+        if (negativ)
+        {
+            summeInEurocent *= -1;
+        }
+        
+        return Optional.of(new Geldbetrag(summeInEurocent));
     }
     
     public static Optional<String> inStandardFormat(String string)
