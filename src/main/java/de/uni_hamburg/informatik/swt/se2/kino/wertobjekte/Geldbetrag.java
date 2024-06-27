@@ -252,6 +252,14 @@ public record Geldbetrag(int eurocent) {
         return Optional.of(new Geldbetrag(summeInEurocent));
     }
     
+    /**
+     * Konvertiert einen String in das Geldbetrag Standard String Repräsentatiosnformat
+     * 
+     * Gibt {@link Optional.empty() } zurück, falls string nicht einem von {@link #fromString} definierten Format entspricht.
+     * 
+     * @param string der zu formatierende String
+     * @return der formatierte String im standard Format nach {@link #toString()}
+     */
     public static Optional<String> inStandardFormat(String string)
     {
         return fromString(string).map(Geldbetrag::toString);
