@@ -45,7 +45,7 @@ public class VorstellungTest
         assertEquals(_16_45, v.getAnfangszeit());
         assertEquals(_20_15, v.getEndzeit());
         assertEquals(_11_07_2008, v.getDatum());
-        assertEquals(1230, v.getPreis());
+        assertEquals(new Geldbetrag(1230), v.getPreis());
         assertNotNull(v.toString());
     }
 
@@ -79,13 +79,13 @@ public class VorstellungTest
                 _11_07_2008, new Geldbetrag(1230));
         Set<Platz> s = new HashSet<>();
 
-        assertEquals(0, v.getPreisFuerPlaetze(s));
+        assertEquals(Geldbetrag.ZERO, v.getPreisFuerPlaetze(s));
 
         s.add(new Platz(5, 5));
         s.add(new Platz(5, 6));
         s.add(new Platz(5, 7));
 
-        assertEquals(3690, v.getPreisFuerPlaetze(s));
+        assertEquals(new Geldbetrag(3690), v.getPreisFuerPlaetze(s));
     }
 
     @Test
