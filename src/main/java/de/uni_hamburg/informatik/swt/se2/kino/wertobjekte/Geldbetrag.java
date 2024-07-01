@@ -28,6 +28,8 @@ public record Geldbetrag(int eurocent) {
      *
      * @param summand Geldbetrag zum addieren
      * @return die Summe der beiden Geldbetraege
+     * 
+     * @require summand != null
      */
     public Geldbetrag add(Geldbetrag summand) {
         assert summand != null : "Vorbedingung verletzt: geldbetrag != null";
@@ -48,6 +50,8 @@ public record Geldbetrag(int eurocent) {
      *
      * @param subtrahend den Geldbetrag zum subtrahieren
      * @return die Differenz zwischen zwei Geldbetraegen, {@link Geldbetrag.MIN_VALUE} falls der 
+     *
+     * @require subtrahend != null
      */
     public Geldbetrag subtract(Geldbetrag subtrahend) {
         assert subtrahend != null : "Vorbedingung verletzt: geldbetrag != null";
@@ -96,7 +100,7 @@ public record Geldbetrag(int eurocent) {
      * @param scalar den Scalar
      * @return den Geldbetrag mit dem Scalar mulitpiziert
      */
-    public Geldbetrag mult(int scalar) {
+    public Geldbetrag multiply(int scalar) {
         try {
             return new Geldbetrag(Math.multiplyExact(eurocent, scalar));
         }
@@ -109,7 +113,8 @@ public record Geldbetrag(int eurocent) {
     
     
     @Override
-    public String toString() {
+    public String toString()
+    {
         // rundet zur 0 falls das nicht glatt aufgeht
         // geht nur weil zur 0 gerundet wird, würde abgerundet werden würde das nicht funktionieren!
         // Beispiel:

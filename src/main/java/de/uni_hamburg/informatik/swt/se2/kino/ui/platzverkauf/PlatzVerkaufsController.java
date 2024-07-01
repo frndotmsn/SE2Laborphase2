@@ -2,6 +2,7 @@ package de.uni_hamburg.informatik.swt.se2.kino.ui.platzverkauf;
 
 import de.uni_hamburg.informatik.swt.se2.kino.entitaeten.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.entitaeten.Vorstellung;
+import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Geldbetrag;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Platz;
 
 import javax.swing.JPanel;
@@ -89,9 +90,9 @@ public class PlatzVerkaufsController
         if (istVerkaufenMoeglich(plaetze))
         {
             // TODO: Auf Geldbetrag Wertobjekt ändern
-            int preis = _vorstellung.getPreisFuerPlaetze(plaetze);
+            Geldbetrag preis = _vorstellung.getPreisFuerPlaetze(plaetze);
             _view.getPreisLabel()
-                .setText("Gesamtpreis: " + preis + " Eurocent");
+                .setText("Gesamtpreis: " + preis + "€");
         }
         else
         {
