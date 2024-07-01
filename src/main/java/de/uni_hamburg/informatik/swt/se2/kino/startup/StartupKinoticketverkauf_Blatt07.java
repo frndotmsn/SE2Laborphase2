@@ -7,6 +7,7 @@ import de.uni_hamburg.informatik.swt.se2.kino.entitaeten.Vorstellung;
 import de.uni_hamburg.informatik.swt.se2.kino.ui.kasse.KassenController;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.FSK;
+import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Geldbetrag;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Uhrzeit;
 
 import javax.swing.SwingUtilities;
@@ -59,36 +60,36 @@ public class StartupKinoticketverkauf_Blatt07
 
         final Vorstellung[] vorstellungen = {
                 // Heute
-                new Vorstellung(saele[0], filme[2], nachmittag, abend, d1, 595),
-                new Vorstellung(saele[0], filme[0], abend, spaet, d1, 795),
-                new Vorstellung(saele[0], filme[0], spaet, nacht, d1, 795),
+                new Vorstellung(saele[0], filme[2], nachmittag, abend, d1, new Geldbetrag(595)),
+                new Vorstellung(saele[0], filme[0], abend, spaet, d1, new Geldbetrag(795)),
+                new Vorstellung(saele[0], filme[0], spaet, nacht, d1, new Geldbetrag(795)),
 
-                new Vorstellung(saele[1], filme[3], nachmittag, abend, d1, 995),
-                new Vorstellung(saele[1], filme[1], spaet, nacht, d1, 895),
+                new Vorstellung(saele[1], filme[3], nachmittag, abend, d1, new Geldbetrag(995)),
+                new Vorstellung(saele[1], filme[1], spaet, nacht, d1, new Geldbetrag(895)),
 
-                new Vorstellung(saele[2], filme[3], abend, spaet, d1, 1095),
-                new Vorstellung(saele[2], filme[4], spaet, nacht, d1, 995),
+                new Vorstellung(saele[2], filme[3], abend, spaet, d1, new Geldbetrag(1095)),
+                new Vorstellung(saele[2], filme[4], spaet, nacht, d1, new Geldbetrag(995)),
 
                 // Morgen
-                new Vorstellung(saele[0], filme[0], abend, spaet, d2, 595),
-                new Vorstellung(saele[0], filme[0], spaet, nacht, d2, 795),
+                new Vorstellung(saele[0], filme[0], abend, spaet, d2, new Geldbetrag(595)),
+                new Vorstellung(saele[0], filme[0], spaet, nacht, d2, new Geldbetrag(795)),
 
-                new Vorstellung(saele[1], filme[2], nachmittag, abend, d2, 995),
-                new Vorstellung(saele[1], filme[4], abend, nacht, d2, 895),
+                new Vorstellung(saele[1], filme[2], nachmittag, abend, d2, new Geldbetrag(995)),
+                new Vorstellung(saele[1], filme[4], abend, nacht, d2, new Geldbetrag(895)),
 
                 new Vorstellung(saele[2], filme[3], nachmittag, abend, d2,
-                        1095),
-                new Vorstellung(saele[2], filme[1], spaet, nacht, d2, 995),
+                        new Geldbetrag(1095)),
+                new Vorstellung(saele[2], filme[1], spaet, nacht, d2, new Geldbetrag(995)),
 
                 // Übermorgen
-                new Vorstellung(saele[0], filme[1], abend, spaet, d3, 595),
-                new Vorstellung(saele[0], filme[1], spaet, nacht, d3, 795),
+                new Vorstellung(saele[0], filme[1], abend, spaet, d3, new Geldbetrag(595)),
+                new Vorstellung(saele[0], filme[1], spaet, nacht, d3, new Geldbetrag(795)),
 
-                new Vorstellung(saele[1], filme[2], nachmittag, abend, d3, 995),
-                new Vorstellung(saele[1], filme[0], abend, nacht, d3, 895),
+                new Vorstellung(saele[1], filme[2], nachmittag, abend, d3, new Geldbetrag(995)),
+                new Vorstellung(saele[1], filme[0], abend, nacht, d3, new Geldbetrag(895)),
 
-                new Vorstellung(saele[2], filme[3], abend, spaet, d3, 1095),
-                new Vorstellung(saele[2], filme[4], spaet, nacht, d3, 995)};
+                new Vorstellung(saele[2], filme[3], abend, spaet, d3, new Geldbetrag(1095)),
+                new Vorstellung(saele[2], filme[4], spaet, nacht, d3, new Geldbetrag(995))};
 
         return new Kino(saele, vorstellungen);
     }
