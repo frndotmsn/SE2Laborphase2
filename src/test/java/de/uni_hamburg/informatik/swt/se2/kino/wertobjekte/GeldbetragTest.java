@@ -103,4 +103,15 @@ public class GeldbetragTest
         assertEquals(Optional.of("-345678,90"), Geldbetrag.inStandardFormat("-345678,9"));
         assertEquals(Optional.of("345678,90"), Geldbetrag.inStandardFormat("345678,9"));
     }
+    
+    @Test
+    public void testeMultiply()
+    {
+        Geldbetrag a = new Geldbetrag(33);
+        assertEquals(new Geldbetrag(99), a.multiply(3));
+        assertEquals(new Geldbetrag(-33), a.multiply(-1));
+        assertEquals(Geldbetrag.MAX_VALUE, a.multiply(Integer.MAX_VALUE));
+        assertEquals(Geldbetrag.MIN_VALUE, a.multiply(Integer.MIN_VALUE));
+        assertEquals(Geldbetrag.ZERO, a.multiply(0));
+    }
 }
