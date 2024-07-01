@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.FSK;
+import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Geldbetrag;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Uhrzeit;
 
 import static org.junit.Assert.assertEquals;
@@ -20,11 +21,11 @@ public class TagesplanTest
     private static final Uhrzeit _startzeit2 = new Uhrzeit(0, 1);
     private static final Uhrzeit _endzeit = new Uhrzeit(1, 1);
     private static final Vorstellung _vorstellung = new Vorstellung(_kinosaal,
-            _film, _startzeit, _endzeit, _datum, 0);
+            _film, _startzeit, _endzeit, _datum, new Geldbetrag(0));
     private static final Vorstellung _vorstellung2 = new Vorstellung(_kinosaal,
-            _film, _startzeit2, _endzeit, _datum, 0);
+            _film, _startzeit2, _endzeit, _datum, new Geldbetrag(0));
     private static final Vorstellung _vorstellung3 = new Vorstellung(_kinosaal2,
-            _film, _startzeit2, _endzeit, _datum, 0);
+            _film, _startzeit2, _endzeit, _datum, new Geldbetrag(0));
 
     private Tagesplan _t;
 

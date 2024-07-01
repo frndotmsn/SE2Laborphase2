@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Datum;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.FSK;
+import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Geldbetrag;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Platz;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Uhrzeit;
 
@@ -37,7 +38,7 @@ public class VorstellungTest
     public void testeKonstruktor()
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
-                _11_07_2008, 1230);
+                _11_07_2008, new Geldbetrag(1230));
 
         assertSame(_kinoA, v.getKinosaal());
         assertSame(_hdR1, v.getFilm());
@@ -52,7 +53,7 @@ public class VorstellungTest
     public void testHatPlatzHatPlaetze()
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
-                _11_07_2008, 1230);
+                _11_07_2008, new Geldbetrag(1230));
 
         assertTrue(v.hatPlatz(new Platz(0, 0)));
         assertTrue(v.hatPlatz(new Platz(19, 49)));
@@ -75,7 +76,7 @@ public class VorstellungTest
     public void testeGibPreisFuerPlaetze()
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
-                _11_07_2008, 1230);
+                _11_07_2008, new Geldbetrag(1230));
         Set<Platz> s = new HashSet<>();
 
         assertEquals(0, v.getPreisFuerPlaetze(s));
@@ -91,7 +92,7 @@ public class VorstellungTest
     public void testeVerkaufen()
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
-                _11_07_2008, 1230);
+                _11_07_2008, new Geldbetrag(1230));
         Platz platz = new Platz(5, 5);
         assertFalse(v.istPlatzVerkauft(platz));
 
@@ -106,7 +107,7 @@ public class VorstellungTest
     public void testeVerkaufenMehrere()
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
-                _11_07_2008, 1230);
+                _11_07_2008, new Geldbetrag(1230));
 
         Platz platz1 = new Platz(1, 1);
         Platz platz2 = new Platz(1, 2);
@@ -128,7 +129,7 @@ public class VorstellungTest
     public void testeSindVerkauft()
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
-                _11_07_2008, 1230);
+                _11_07_2008, new Geldbetrag(1230));
 
         Platz platz1 = new Platz(1, 1);
         Platz platz2 = new Platz(1, 2);
@@ -156,7 +157,7 @@ public class VorstellungTest
     public void testeSindNichtVerkauft()
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
-                _11_07_2008, 1230);
+                _11_07_2008, new Geldbetrag(1230));
 
         Platz platz1 = new Platz(1, 1);
         Platz platz2 = new Platz(1, 2);
@@ -192,7 +193,7 @@ public class VorstellungTest
     public void testeGibAnzahlVerkauftePlaetze()
     {
         Vorstellung v = new Vorstellung(_kinoA, _hdR1, _16_45, _20_15,
-                _11_07_2008, 1230);
+                _11_07_2008, new Geldbetrag(1230));
 
         assertEquals(0, v.getAnzahlVerkauftePlaetze());
         for (int i = 1; i <= 5; i++)
