@@ -207,9 +207,9 @@ public class PlatzVerkaufsController
 
             if (einzahlung.greaterThanOrEqualTo(preis)) 
             {
-                barzahlungController.schliesseFenster();
                 _vorstellung.verkaufePlaetze(plaetze);
                 aktualisierePlatzplan();
+                barzahlungController.schliesseFenster();
             } 
             else 
             {
