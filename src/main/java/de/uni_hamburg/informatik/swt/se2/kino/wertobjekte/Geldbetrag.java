@@ -129,8 +129,12 @@ public record Geldbetrag(int eurocent) {
         // + cent = 30
         // also "-31314,30" <- geht nicht auf!
         
+        boolean negativ = eurocent < 0; 
+        
         int euro = eurocent / 100;
-        String euroString = Integer.toString(euro);
+        
+        // Math.abs, weil wir - separat behandeln
+        String euroString = Integer.toString(Math.abs(euro));
         String paddedEuroString = StringUtils.pad(euroString, MIN_EURO_STELLEN, '0', LeftRight.LEFT);
         
         // wir wollen nicht dass hier ggf. auch noch ein - steht!
@@ -139,6 +143,7 @@ public record Geldbetrag(int eurocent) {
         String paddedCentString = StringUtils.pad(centString, CENT_STELLEN, '0', LeftRight.LEFT);
 
         return new StringBuilder()
+                .append(negativ ? "-" : "")
                 .append(paddedEuroString)
                 .append(',')
                 .append(paddedCentString)

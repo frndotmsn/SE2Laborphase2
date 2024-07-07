@@ -51,6 +51,9 @@ public class GeldbetragTest
         
         Geldbetrag negativ = new Geldbetrag(-10040);
         assertEquals("-100,40", negativ.toString());
+        
+        Geldbetrag negativImCentbereich = new Geldbetrag(-10);
+        assertEquals("-00,10", negativImCentbereich.toString());
     }
     
     @Test
