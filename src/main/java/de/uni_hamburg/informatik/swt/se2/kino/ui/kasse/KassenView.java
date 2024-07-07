@@ -142,4 +142,12 @@ class KassenView
     {
         return _beendenButton;
     }
+    
+    /**
+     * Gibt das Frame der View zurück
+     */
+    public JFrame getFrame()
+    {
+        return _frame;
+    }
 }

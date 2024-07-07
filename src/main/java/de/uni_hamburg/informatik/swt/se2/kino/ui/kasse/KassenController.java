@@ -55,6 +55,7 @@ public class KassenController
                 _datumAuswaehlController.getUIPanel(),
                 _vorstellungAuswaehlController.getUIPanel());
 
+        _platzVerkaufsController.setzeKassenFrame(_view.getFrame());
         registriereUIAktionen();
         setzeTagesplanFuerAusgewaehltesDatum();
         setzeAusgewaehlteVorstellung();
