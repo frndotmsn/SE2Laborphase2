@@ -3,6 +3,10 @@ package de.uni_hamburg.informatik.swt.se2.kino.ui.barzahlung;
 import de.uni_hamburg.informatik.swt.se2.kino.entitaeten.Vorstellung;
 import de.uni_hamburg.informatik.swt.se2.kino.ui.platzverkauf.JPlatzplan;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Geldbetrag;
+import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Platz;
+
+import java.util.Set;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -48,17 +52,19 @@ public class BarzahlungController
 	    
 	    _view.getEinzahlungTextField().getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
 	    {
-	            
+	        @Override    
 		    public void changedUpdate(javax.swing.event.DocumentEvent e) 
 		    {
 		    	updateRestbetrag();
 		    }
 	
+	        @Override 
 		    public void removeUpdate(javax.swing.event.DocumentEvent e) 
 		    {
 		    	updateRestbetrag();
 		    }
 	
+	        @Override 
 		    public void insertUpdate(javax.swing.event.DocumentEvent e) 
 		    {
 		    	updateRestbetrag();
@@ -120,8 +126,12 @@ public class BarzahlungController
 	 */
 	private void abbrechen()
 	{
-		_vorstellung.stornierePlaetze(_platzplan.getAusgewaehltePlaetze());
-		_platzplan.entferneAuswahl();
+		Set<Platz> ausgewaehltePlaetze = _platzplan.getAusgewaehltePlaetze();
+		if (ausgewaehltePlaetze.isEmpty())
+		{
+			_vorstellung.stornierePlaetze(_platzplan.getAusgewaehltePlaetze());
+			_platzplan.entferneAuswahl();
+		}
 		schliesseFenster();
 	}
 	
