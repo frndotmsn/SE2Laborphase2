@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -40,9 +41,9 @@ public class BarzahlungView
      * Initialisert die Bezahlungs-Oberflaeche und nimmt einen Geldbetrag
      * entgegen, welcher gedeckt werden muss.
      */
-    public BarzahlungView()
+    public BarzahlungView(JFrame frame)
     {
-        _dialog = new JDialog();
+        _dialog = new JDialog(frame, "Barzahlung");
         _dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         _dialog.setResizable(false);
         _dialog.setModal(true);
