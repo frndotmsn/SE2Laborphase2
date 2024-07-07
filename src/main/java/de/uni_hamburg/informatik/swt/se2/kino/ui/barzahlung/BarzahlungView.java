@@ -40,6 +40,8 @@ public class BarzahlungView
     /**
      * Initialisert die Bezahlungs-Oberflaeche und nimmt einen Geldbetrag
      * entgegen, welcher gedeckt werden muss.
+     * 
+     * @param frame Frame des Aufrufendenfensters
      */
     public BarzahlungView(JFrame frame)
     {
