@@ -15,8 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Geldbetrag;
-
 /**
  * Das UI des {@link BarzahlungView}.
  * 
@@ -42,7 +40,7 @@ public class BarzahlungView
      * Initialisert die Bezahlungs-Oberflaeche und nimmt einen Geldbetrag
      * entgegen, welcher gedeckt werden muss.
      */
-    public BarzahlungView(Geldbetrag geldbetrag)
+    public BarzahlungView()
     {
         _dialog = new JDialog();
         _dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -52,7 +50,7 @@ public class BarzahlungView
             .setLayout(new BorderLayout());
 
         JComponent topPanel = erstelleUeberschriftPanel();
-        JComponent centerPanel = erstelleCenterPanel(geldbetrag);
+        JComponent centerPanel = erstelleCenterPanel();
         JComponent bottomPanel = erstelleBeendenPanel();
 
         _dialog.getContentPane()
@@ -104,7 +102,7 @@ public class BarzahlungView
      * Erzeugt das zentrale Panel mit den Bezahlungsfunktionen
      * und einem Label für Fehlermeldungen.
      */
-    private JPanel erstelleCenterPanel(Geldbetrag geldbetrag)
+    private JPanel erstelleCenterPanel()
     {
         JPanel centerPanel = new JPanel();
         centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
