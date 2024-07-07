@@ -29,10 +29,10 @@ public class BarzahlungView
     private JDialog _dialog;
     private JTextField _einzahlungTextField;
     private JLabel _restbetragLabel;
-    private JLabel _preisLabel;
     private JButton _bezahlenButton;
     private JButton _abbrechenButton;
     private JLabel _preisWertLabel;
+    private JLabel _fehlermeldungLabel;
 
     /**
      * Initialisert die Oberfläche. Die Parameter sind die Views der Submodule,
@@ -97,13 +97,14 @@ public class BarzahlungView
      */
     private JPanel erstelleCenterPanel(Geldbetrag geldbetrag)
     {
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BorderLayout());
+        JPanel centerPanel = new JPanel(new BorderLayout());
         
-        _preisLabel = new JLabel("Fehlermeldung", SwingConstants.CENTER);
+        _fehlermeldungLabel = new JLabel("", SwingConstants.CENTER);
+        _fehlermeldungLabel.setForeground(Color.red);
+        
         JComponent barzahlungPanel = erstelleBarzahlungPanel(geldbetrag);
 
-        centerPanel.add(_preisLabel, BorderLayout.SOUTH);
+        centerPanel.add(_fehlermeldungLabel, BorderLayout.SOUTH);
         centerPanel.add(barzahlungPanel, BorderLayout.CENTER);
 
         return centerPanel;
@@ -114,8 +115,7 @@ public class BarzahlungView
      */
     private JPanel erstelleBarzahlungPanel(Geldbetrag geldbetrag)
     {
-        JPanel barzahlungPanel = new JPanel();
-        barzahlungPanel.setLayout(new GridLayout(2, 3));
+        JPanel barzahlungPanel = new JPanel(new GridLayout(2, 3));
         JLabel textPreisLabel = new JLabel("Preis", SwingConstants.CENTER);
         _preisWertLabel = new JLabel(geldbetrag.toString(),
                 SwingConstants.CENTER);
@@ -132,7 +132,7 @@ public class BarzahlungView
         barzahlungPanel.add(textRestbetragLabel);
         barzahlungPanel.add(_preisWertLabel);
         barzahlungPanel.add(_einzahlungTextField);
-        barzahlungPanel.add(_restbetragLabel);
+        barzahlungPanel.add(_restbetragLabel); 
 
         return barzahlungPanel;
     }
@@ -202,6 +202,16 @@ public class BarzahlungView
     public JButton getAbbrechenButton() 
     {
         return _abbrechenButton;
+    }
+    
+    /**
+     * Gibt das Fehlerlabel zurück.
+     * 
+     * @return Das Fehlerlabel für Fehlermeldungen.
+     */
+    public JLabel getFehlermeldungLabel() 
+    {
+        return _fehlermeldungLabel;
     }
 
 }
