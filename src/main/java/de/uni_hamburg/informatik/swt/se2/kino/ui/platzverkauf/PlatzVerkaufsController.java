@@ -2,9 +2,11 @@ package de.uni_hamburg.informatik.swt.se2.kino.ui.platzverkauf;
 
 import de.uni_hamburg.informatik.swt.se2.kino.entitaeten.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.entitaeten.Vorstellung;
+import de.uni_hamburg.informatik.swt.se2.kino.ui.barzahlung.BarzahlungController;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Geldbetrag;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Platz;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.util.Set;
 
@@ -25,6 +27,8 @@ public class PlatzVerkaufsController
     private Vorstellung _vorstellung;
 
     private PlatzVerkaufsView _view;
+    
+    private JFrame _kassenFrame;
 
     /**
      * Initialisiert den PlatzVerkaufsController.
@@ -48,6 +52,20 @@ public class PlatzVerkaufsController
     public JPanel getUIPanel()
     {
         return _view.getUIPanel();
+    }
+    
+    /**
+     * Setzt das Frame zugehörig zum Kassen-Controller
+     * 
+     * @require kassenFrame != null
+     * 
+     * @param kassenFrame
+     */
+    public void setzeKassenFrame(JFrame kassenFrame)
+    {
+        assert kassenFrame != null : "Vorbedingung verletzt: kassenFrame != null";
+        
+        _kassenFrame = kassenFrame;
     }
 
     /**
@@ -170,8 +188,15 @@ public class PlatzVerkaufsController
         
         // TODO: BarzahlungsDialog mithilfe des Controllers erstellen / starten
         
-        vorstellung.verkaufePlaetze(plaetze);
-        aktualisierePlatzplan();
+        Geldbetrag preis = _vorstellung.getPreisFuerPlaetze(plaetze);
+        // blockiert, bis der Dialog geschlossen wurde
+        BarzahlungController barzahlungController = new BarzahlungController(_kassenFrame, preis);
+        
+        if (barzahlungController.gibZahlungErfolgt())
+        {
+            vorstellung.verkaufePlaetze(plaetze);
+            aktualisierePlatzplan();
+        }
     }
 
     /**
