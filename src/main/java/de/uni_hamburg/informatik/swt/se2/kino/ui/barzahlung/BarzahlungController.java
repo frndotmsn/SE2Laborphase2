@@ -8,6 +8,8 @@ import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Platz;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
 * Der Controller für Barzahlungen.
@@ -47,30 +49,29 @@ public class BarzahlungController
 	 */
 	private void registriereUIAktionen() 
 	{
-	    _view.getBezahlenButton().addActionListener(e -> verarbeiteBezahlung());
-	    _view.getAbbrechenButton().addActionListener(e -> abbrechen());
+		_view.getBezahlenButton().addActionListener(e -> verarbeiteBezahlung());
+        _view.getAbbrechenButton().addActionListener(e -> abbrechen());
+
+        DocumentListener documentListener = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateRestbetrag();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateRestbetrag();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateRestbetrag();
+            }
+        };
+
+        _view.getEinzahlungTextField().getDocument().addDocumentListener(documentListener);
+    }
 	    
-	    _view.getEinzahlungTextField().getDocument().addDocumentListener(new javax.swing.event.DocumentListener() 
-	    {
-	        @Override    
-		    public void changedUpdate(javax.swing.event.DocumentEvent e) 
-		    {
-		    	updateRestbetrag();
-		    }
-	
-	        @Override 
-		    public void removeUpdate(javax.swing.event.DocumentEvent e) 
-		    {
-		    	updateRestbetrag();
-		    }
-	
-	        @Override 
-		    public void insertUpdate(javax.swing.event.DocumentEvent e) 
-		    {
-		    	updateRestbetrag();
-		    }
-	     });
-	 }
 	
 	/**
 	 * Zeigt das Barzahlungsfenster an. 
