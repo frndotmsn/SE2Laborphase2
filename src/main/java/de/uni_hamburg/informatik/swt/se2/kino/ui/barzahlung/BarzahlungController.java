@@ -14,9 +14,9 @@ import javax.swing.event.DocumentListener;
 
 /**
 * Der Controller für Barzahlungen.
-* Dieser {@link BarzahlungController} übernimmt die Verwaltung der Barzahlungstransaktionen. 
-* Er ermöglicht die Anzeige des Barzahlungs-Fensters, die Berechnung des Restbetrags und 
-* die Verwaltung der Abbruch- und Zahlungsvorgänge.
+* Dieser {@link BarzahlungController} uebernimmt die Verwaltung der Barzahlungstransaktionen. 
+* Er ermoeglicht die Anzeige des Barzahlungs-Fensters, die Berechnung des Restbetrags und 
+* die Verwaltung der Abbruch- und Zahlungsvorgaenge.
 * 
 * @author Ben Denikus
 * @version SoSe 2024
@@ -32,7 +32,7 @@ public class BarzahlungController
 	 * Erstellt einen neuen BarzahlungController.
 	 * 
 	 * @param platzplan Der Platzplan, der die ausgewaehlten Plaetze enthaelt. 
-	 * @param view Die Ansicht für die Barzahlung.
+	 * @param view Die Ansicht fuer die Barzahlung.
 	 * @param vorstellung Die Vorstellung, fuer die die Plaetze verkauft werden sollen.
 	 */
 	public BarzahlungController(JPlatzplan platzplan, BarzahlungView view, Vorstellung vorstellung)
@@ -41,6 +41,9 @@ public class BarzahlungController
 		this._view = view;
 		this._preis = vorstellung.getPreisFuerPlaetze(platzplan.getAusgewaehltePlaetze());
 		this._vorstellung = vorstellung;
+		
+		_view.getRestbetragLabel().setText(Geldbetrag.ZERO.toString() + "€");
+		
 		registriereUIAktionen();
 	}
 	
@@ -110,7 +113,7 @@ public class BarzahlungController
         else 
         {
             // Ungültige Eingabe, entsprechende Fehlermeldung anzeigen.
-            _view.getRestbetragLabel().setText("00,00€");
+            _view.getRestbetragLabel().setText(Geldbetrag.ZERO.toString() + "€");
             _view.getFehlermeldungLabel().setText("Ungültige Eingabe");
             _view.getBezahlenButton().setEnabled(false);
         }
@@ -134,6 +137,7 @@ public class BarzahlungController
             {
                 _vorstellung.verkaufePlaetze(_platzplan.getAusgewaehltePlaetze());
                 zeigeNachricht("Bezahlung erfolgreich!");
+                aktualisierePlatzplan();
                 schliesseFenster();
             } 
             else 
@@ -157,9 +161,10 @@ public class BarzahlungController
 		Set<Platz> ausgewaehltePlaetze = _platzplan.getAusgewaehltePlaetze();
 		if (ausgewaehltePlaetze.isEmpty())
 		{
-			_vorstellung.stornierePlaetze(_platzplan.getAusgewaehltePlaetze());
+			_vorstellung.stornierePlaetze(ausgewaehltePlaetze);
 			_platzplan.entferneAuswahl();
 		}
+		_platzplan.entferneAuswahl();
 		schliesseFenster();
 	}
 	
@@ -171,5 +176,17 @@ public class BarzahlungController
 	private void zeigeNachricht(String nachricht) 
 	{
         JOptionPane.showMessageDialog(null, nachricht);
+    }
+	
+	/**
+     * Aktualisiert den Platzplan.
+     */
+    private void aktualisierePlatzplan() 
+    {
+        for (Platz platz : _platzplan.getAusgewaehltePlaetze()) 
+        {
+            _platzplan.markierePlatzAlsVerkauft(platz);
+        }
+        _platzplan.entferneAuswahl();
     }
 }
