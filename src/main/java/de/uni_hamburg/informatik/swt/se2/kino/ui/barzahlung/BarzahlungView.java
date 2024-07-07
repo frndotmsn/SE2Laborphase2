@@ -43,7 +43,7 @@ public class BarzahlungView
         _dialog = new JDialog();
         _dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         _dialog.setResizable(false);
-        _dialog.setModal(false);
+        _dialog.setModal(true);
         _dialog.getContentPane()
             .setLayout(new BorderLayout());
 
@@ -125,7 +125,7 @@ public class BarzahlungView
                 SwingConstants.CENTER);
         JLabel textRestbetragLabel = new JLabel("Restbetrag",
                 SwingConstants.CENTER);
-        _restbetragLabel = new JLabel("00,00€", SwingConstants.CENTER);
+        _restbetragLabel = new JLabel("", SwingConstants.CENTER);
 
         barzahlungPanel.add(textPreisLabel);
         barzahlungPanel.add(textEinzahlungLabel);
