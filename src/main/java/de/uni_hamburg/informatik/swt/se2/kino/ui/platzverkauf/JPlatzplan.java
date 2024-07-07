@@ -29,7 +29,7 @@ import java.util.Set;
  * @author SE2-Team
  * @version SoSe 2024
  */
-class JPlatzplan extends JComponent
+public class JPlatzplan extends JComponent
 {
     public static final Dimension PLATZBUTTON_GROESSE = new Dimension(22, 22);
 

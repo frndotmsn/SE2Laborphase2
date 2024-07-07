@@ -111,7 +111,17 @@ public record Geldbetrag(int eurocent) {
         }
     }
     
-    
+    /**
+     * Überprüft, ob dieser Geldbetrag größer oder gleich einem anderen Geldbetrag ist.
+     * 
+     * @param betrag Der Geldbetrag, mit dem verglichen werden soll
+     * @return true, wenn dieser Geldbetrag größer oder gleich dem anderen Geldbetrag ist, false sonst
+    */
+    public boolean greaterThanOrEqualTo(Geldbetrag betrag) 
+    {
+        return this.eurocent >= betrag.eurocent;
+    }
+
     @Override
     public String toString()
     {
