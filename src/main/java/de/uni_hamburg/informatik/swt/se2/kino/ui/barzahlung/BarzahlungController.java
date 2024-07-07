@@ -5,6 +5,7 @@ import de.uni_hamburg.informatik.swt.se2.kino.ui.platzverkauf.JPlatzplan;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Geldbetrag;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Platz;
 
+import java.util.Optional;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -96,12 +97,25 @@ public class BarzahlungController
 	private void updateRestbetrag() 
 	{
 		String einzahlungText = _view.getEinzahlungTextField().getText();
-        Geldbetrag einzahlung = Geldbetrag.fromString(einzahlungText).orElse(Geldbetrag.ZERO);
-        Geldbetrag restbetrag = _preis.subtract(einzahlung);
-        _view.getRestbetragLabel().setText(restbetrag.toString() + "€");
-        
-        _view.getBezahlenButton().setEnabled(einzahlung.greaterThanOrEqualTo(_preis));
+        Optional<Geldbetrag> optionalEinzahlung = Geldbetrag.fromString(einzahlungText);
+
+        if (optionalEinzahlung.isPresent()) 
+        {
+            Geldbetrag einzahlung = optionalEinzahlung.get();
+            Geldbetrag restbetrag = _preis.subtract(einzahlung);
+            _view.getRestbetragLabel().setText(restbetrag.toString() + "€");
+            _view.getBezahlenButton().setEnabled(einzahlung.greaterThanOrEqualTo(_preis));
+            _view.getFehlermeldungLabel().setText("");
+        } 
+        else 
+        {
+            // Ungültige Eingabe, entsprechende Fehlermeldung anzeigen.
+            _view.getRestbetragLabel().setText("00,00€");
+            _view.getFehlermeldungLabel().setText("Ungültige Eingabe");
+            _view.getBezahlenButton().setEnabled(false);
+        }
     }
+    
 	
 	/**
 	 * Verarbeitet die Bezahlung.
@@ -109,14 +123,27 @@ public class BarzahlungController
 	 */
 	private void verarbeiteBezahlung() 
 	{
-        String einzahlungText = _view.getEinzahlungTextField().getText();
-        Geldbetrag einzahlung = Geldbetrag.fromString(einzahlungText).orElse(Geldbetrag.ZERO);
-        String nachricht = einzahlung.greaterThanOrEqualTo(_preis) ? "Bezahlung erfolgreich!" : "Einzahlung unzureichend!";
-        zeigeNachricht(nachricht);
-        if (einzahlung.greaterThanOrEqualTo(_preis)) 
+		String einzahlungText = _view.getEinzahlungTextField().getText();
+        Optional<Geldbetrag> optionalEinzahlung = Geldbetrag.fromString(einzahlungText);
+
+        if (optionalEinzahlung.isPresent()) 
         {
-        	_vorstellung.verkaufePlaetze(_platzplan.getAusgewaehltePlaetze());
-            schliesseFenster();
+            Geldbetrag einzahlung = optionalEinzahlung.get();
+
+            if (einzahlung.greaterThanOrEqualTo(_preis)) 
+            {
+                _vorstellung.verkaufePlaetze(_platzplan.getAusgewaehltePlaetze());
+                zeigeNachricht("Bezahlung erfolgreich!");
+                schliesseFenster();
+            } 
+            else 
+            {
+                _view.getFehlermeldungLabel().setText("Einzahlung unzureichend! Bitte geben Sie einen ausreichenden Betrag ein.");
+            }
+        } 
+        else 
+        {
+            _view.getFehlermeldungLabel().setText("Ungültige Eingabe! Bitte geben Sie einen gültigen Betrag ein.");
         }
     }
 	
