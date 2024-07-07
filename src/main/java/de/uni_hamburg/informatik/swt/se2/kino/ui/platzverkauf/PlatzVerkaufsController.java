@@ -2,9 +2,12 @@ package de.uni_hamburg.informatik.swt.se2.kino.ui.platzverkauf;
 
 import de.uni_hamburg.informatik.swt.se2.kino.entitaeten.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.entitaeten.Vorstellung;
+import de.uni_hamburg.informatik.swt.se2.kino.ui.barzahlung.BarzahlungController;
+import de.uni_hamburg.informatik.swt.se2.kino.ui.barzahlung.BarzahlungView;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Geldbetrag;
 import de.uni_hamburg.informatik.swt.se2.kino.wertobjekte.Platz;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.util.Set;
 
@@ -161,7 +164,9 @@ public class PlatzVerkaufsController
     }
 
     /**
-     * Verkauft die ausgewählten Plaetze.
+     * Verkauft die ausgewählten Plaetze nach Bestaetigung durch Barzahlung.
+     * 
+     * @param vorstellung Die aktuelle Vorstellung. 
      */
     private void verkaufePlaetze(Vorstellung vorstellung)
     {
@@ -169,19 +174,80 @@ public class PlatzVerkaufsController
             .getAusgewaehltePlaetze();
         
         // TODO: BarzahlungsDialog mithilfe des Controllers erstellen / starten
-        
-        vorstellung.verkaufePlaetze(plaetze);
-        aktualisierePlatzplan();
+        if (istVerkaufenMoeglich(plaetze))
+        {
+        	zeigeBarzahlungsDialog(plaetze, _view.getPlatzplan());
+        } 
+        else 
+        {
+            JOptionPane.showMessageDialog(null, "Die ausgewählten Plätze können nicht verkauft werden.");
+        }
+   
     }
 
     /**
+     * Zeigt den Barzahlungsdialog an und ueberprueft die Bezahlung.
+     * 
+     * @param plaetze Die zu verkaufenden Plaetze
+     * @return true, wenn die Bezahlung erfolgreich war, andernfalls false. 
+     */
+    private void zeigeBarzahlungsDialog(Set<Platz> plaetze, JPlatzplan platzplan) 
+    {
+    	Geldbetrag preis = _vorstellung.getPreisFuerPlaetze(plaetze);
+        BarzahlungView barzahlungView = new BarzahlungView(preis);
+        BarzahlungController barzahlungController = new BarzahlungController(platzplan, barzahlungView, _vorstellung);
+
+        barzahlungController.anzeigeFenster();
+
+        // Den Listener für den Bezahlbutton registrieren, um die erfolgreiche Zahlung zu überprüfen
+        barzahlungView.getBezahlenButton().addActionListener(e -> 
+        {
+            String einzahlungText = barzahlungView.getEinzahlungTextField().getText();
+            Geldbetrag einzahlung = Geldbetrag.fromString(einzahlungText).orElse(Geldbetrag.ZERO);
+
+            if (einzahlung.greaterThanOrEqualTo(preis)) 
+            {
+                barzahlungController.schliesseFenster();
+                _vorstellung.verkaufePlaetze(plaetze);
+                aktualisierePlatzplan();
+            } 
+            else 
+            {
+                JOptionPane.showMessageDialog(null, "Einzahlung unzureichend! Bitte geben Sie einen ausreichenden Betrag ein.");
+            }
+        });
+
+        // Den Listener für den Abbrechen-Button registrieren, um die Transaktion abzubrechen
+        barzahlungView.getAbbrechenButton().addActionListener(e -> 
+        {
+            // Sicherstellen, dass die ausgewählten Plätze freigegeben werden
+            if (istStornierenMoeglich(platzplan.getAusgewaehltePlaetze())) 
+            {
+                _vorstellung.stornierePlaetze(platzplan.getAusgewaehltePlaetze());
+            }
+            platzplan.entferneAuswahl();
+            barzahlungController.schliesseFenster();
+        });
+    }
+        
+	/**
      * Storniert die ausgewählten Plaetze.
      */
     private void stornierePlaetze(Vorstellung vorstellung)
     {
         Set<Platz> plaetze = _view.getPlatzplan()
             .getAusgewaehltePlaetze();
-        vorstellung.stornierePlaetze(plaetze);
-        aktualisierePlatzplan();
+        
+        if (istStornierenMoeglich(plaetze))
+        	{
+        	_vorstellung.stornierePlaetze(plaetze);
+        	aktualisierePlatzplan();
+        	}
+        else 
+        {
+        	JOptionPane.showMessageDialog(null, "Die ausgewählten Plätze können nicht storniert werden.");
+
+        }
+        
     }
 }
