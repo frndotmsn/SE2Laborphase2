@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 /**
- * Das UI des {@link BarzahlungView}.
+ * Das UI des {@link BarzahlungController}.
  * 
  * @author Jonas Schwanzer
  * @version SoSe 2024
@@ -41,11 +41,11 @@ public class BarzahlungView
      * Initialisert die Bezahlungs-Oberflaeche und nimmt einen Geldbetrag
      * entgegen, welcher gedeckt werden muss.
      * 
-     * @param frame Frame des Aufrufendenfensters
+     * @param parentFrame Frame des Aufrufendenfensters
      */
-    public BarzahlungView(JFrame frame)
+    public BarzahlungView(JFrame parentFrame)
     {
-        _dialog = new JDialog(frame, "Barzahlung");
+        _dialog = new JDialog(parentFrame, "Barzahlung");
         _dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         _dialog.setResizable(false);
         _dialog.setModal(true);
