@@ -195,7 +195,7 @@ public class PlatzVerkaufsController
     {
     	Geldbetrag preis = _vorstellung.getPreisFuerPlaetze(plaetze);
         BarzahlungView barzahlungView = new BarzahlungView(preis);
-        BarzahlungController barzahlungController = new BarzahlungController(platzplan, barzahlungView, _vorstellung);
+        BarzahlungController barzahlungController = new BarzahlungController(platzplan, _vorstellung);
 
         barzahlungController.anzeigeFenster();
 
