@@ -189,6 +189,16 @@ public class BarzahlungView
     }
 
     /**
+     * Gibt das Label für die Fehlermeldung zurück.
+     * 
+     * @return Das Label für die Fehlermeldung.
+     */
+    public JLabel getFehlermeldungLabel()
+    {
+        return _fehlermeldungLabel;
+    }
+
+    /**
      * Gibt das Label für den Preis zurück.
      * 
      * @return Das Label für den Preis.
