@@ -35,12 +35,12 @@ public class BarzahlungController
 	 * @param view Die Ansicht fuer die Barzahlung.
 	 * @param vorstellung Die Vorstellung, fuer die die Plaetze verkauft werden sollen.
 	 */
-	public BarzahlungController(JPlatzplan platzplan, BarzahlungView view, Vorstellung vorstellung)
+	public BarzahlungController(JPlatzplan platzplan, Vorstellung vorstellung)
 	{
 		this._platzplan = platzplan;
-		this._view = view;
-		this._preis = vorstellung.getPreisFuerPlaetze(platzplan.getAusgewaehltePlaetze());
 		this._vorstellung = vorstellung;
+		this._preis = vorstellung.getPreisFuerPlaetze(platzplan.getAusgewaehltePlaetze());
+		this._view = new BarzahlungView(_preis);
 		
 		_view.getRestbetragLabel().setText(Geldbetrag.ZERO.toString() + "€");
 		
